@@ -1,5 +1,4 @@
 package com.dh.clinica.controller;
-
 import com.dh.clinica.entity.Paciente;
 import com.dh.clinica.service.impl.PacienteService;
 import org.springframework.http.HttpStatusCode;
@@ -28,8 +27,6 @@ public class PacienteController {
         if(paciente.isPresent()){
             return ResponseEntity.ok(paciente.get());
         } else {
-            // ResponseEntity.status(HttpStatus.NOT_FOUND).body("paciente no encontrado");
-            //ResponseEntity.notFound().build();
             return ResponseEntity.status(HttpStatusCode.valueOf(404)).build();
         }
     }

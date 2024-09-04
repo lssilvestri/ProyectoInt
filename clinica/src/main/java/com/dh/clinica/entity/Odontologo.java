@@ -1,10 +1,15 @@
 package com.dh.clinica.entity;
 
+import com.dh.clinica.dto.response.OdontologoResponseDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,6 +25,11 @@ public class Odontologo {
     private String apellido;
     private String nombre;
 
+    @OneToMany(mappedBy = "odontologo")
+    @JsonIgnore
+    //@JsonManagedReference(value = "odontologo-turno")
+    private Set<Turno> turnoSet;
+
 
     @Override
     public String toString() {
@@ -29,5 +39,14 @@ public class Odontologo {
                 ", apellido='" + apellido + '\'' +
                 ", nombre='" + nombre + '\'' +
                 '}';
+    }
+
+    public OdontologoResponseDto convertirAOdontologoResponseDto() {
+        return new OdontologoResponseDto(
+                this.getId(),
+                this.getNombre(),
+                this.getApellido(),
+                this.getNroMatricula()
+        );
     }
 }
