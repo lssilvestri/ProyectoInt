@@ -1,15 +1,9 @@
 package com.dh.clinica.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "odontologos")
 public class Odontologo {
@@ -19,15 +13,4 @@ public class Odontologo {
     private String nroMatricula;
     private String apellido;
     private String nombre;
-
-
-    @Override
-    public String toString() {
-        return "Odontologo{" +
-                "id=" + id +
-                ", nroMatricula='" + nroMatricula + '\'' +
-                ", apellido='" + apellido + '\'' +
-                ", nombre='" + nombre + '\'' +
-                '}';
-    }
 }

@@ -1,17 +1,11 @@
 package com.dh.clinica.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDate;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 @Entity
 @Table(name = "pacientes")
 public class Paciente {
@@ -22,18 +16,8 @@ public class Paciente {
     private String nombre;
     private String dni;
     private LocalDate fechaIngreso;
+    
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "domicilio_id")
     private Domicilio domicilio;
-
-
-    @Override
-    public String toString() {
-        return "Paciente{" +
-                "id=" + id +
-                ", apellido='" + apellido + '\'' +
-                ", nombre='" + nombre + '\'' +
-                ", dni='" + dni + '\'' +
-                ", fechaIngreso=" + fechaIngreso +
-                ", domicilio=" + domicilio +
-                '}';
-    }
 }

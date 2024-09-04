@@ -1,16 +1,11 @@
 package com.dh.clinica.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 
 import java.time.LocalDate;
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+
+@Data
 @Entity
 @Table(name = "turnos")
 public class Turno {
@@ -20,14 +15,4 @@ public class Turno {
     private Paciente paciente;
     private Odontologo odontologo;
     private LocalDate fecha;
-
-    @Override
-    public String toString() {
-        return "Turno{" +
-                "id=" + id +
-                ", paciente=" + paciente +
-                ", odontologo=" + odontologo +
-                ", fecha=" + fecha +
-                '}';
-    }
 }
