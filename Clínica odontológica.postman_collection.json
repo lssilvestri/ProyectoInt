@@ -457,7 +457,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"apellido\": \"García\",\r\n    \"nombre\": \"Juan\",\r\n    \"dni\": \"12345678\",\r\n    \"fechaIngreso\": \"2024-09-05\",\r\n    \"domicilio\": {\r\n        \"calle\": \"Calle Falsa\",\r\n        \"numero\": \"123\",\r\n        \"ciudad\": \"Bogotá\",\r\n        \"provincia\": \"Cundinamarca\",\r\n        \"pais\": \"Colombia\"\r\n    }\r\n}",
+							"raw": "{\r\n    \"paciente_id\": 1,\r\n    \"odontologo_id\": 1,\r\n    \"fecha\": \"2024-10-15\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -465,12 +465,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/paciente/guardar",
+							"raw": "{{base_url}}/turno/guardar",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"paciente",
+								"turno",
 								"guardar"
 							]
 						},
@@ -498,12 +498,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/paciente/buscar",
+							"raw": "{{base_url}}/turno/buscar",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"paciente",
+								"turno",
 								"buscar"
 							]
 						},
@@ -543,12 +543,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/paciente/buscar/1",
+							"raw": "{{base_url}}/turno/buscar/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"paciente",
+								"turno",
 								"buscar",
 								"1"
 							]
@@ -579,7 +579,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\":1,\n    \"paciente_id\": 1,\n    \"odontologo_id\": 1,\n    \"fecha\": \"2024-10-18\"\n}\n",
+							"raw": "{\n    \"id\": 1,\n    \"paciente_id\": 1,\n    \"odontologo_id\": 1,\n    \"fecha\": \"2024-10-18\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -630,12 +630,12 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/paciente/eliminar/1",
+							"raw": "{{base_url}}/turno/eliminar/1",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
-								"paciente",
+								"turno",
 								"eliminar",
 								"1"
 							]
