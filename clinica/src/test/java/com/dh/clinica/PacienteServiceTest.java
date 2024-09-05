@@ -3,7 +3,7 @@
 //import com.dh.clinica.db.H2Connection;
 //import com.dh.clinica.entity.Domicilio;
 //import com.dh.clinica.entity.Paciente;
-//import com.dh.clinica.service.impl.PacienteService;
+//import com.dh.clinica.service.paciente.PacienteService;
 //import org.junit.jupiter.api.BeforeAll;
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;

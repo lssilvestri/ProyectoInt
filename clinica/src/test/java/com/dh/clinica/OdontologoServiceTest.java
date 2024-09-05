@@ -2,7 +2,7 @@
 //import com.dh.clinica.dao.impl.OdontologoDaoH2;
 //import com.dh.clinica.db.H2Connection;
 //import com.dh.clinica.entity.Odontologo;
-//import com.dh.clinica.service.impl.OdontologoService;
+//import com.dh.clinica.service.odontologo.OdontologoService;
 //import org.junit.jupiter.api.BeforeAll;
 //import org.junit.jupiter.api.DisplayName;
 //import org.junit.jupiter.api.Test;
