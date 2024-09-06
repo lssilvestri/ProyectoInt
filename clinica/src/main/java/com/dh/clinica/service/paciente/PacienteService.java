@@ -7,6 +7,8 @@ import com.dh.clinica.entity.Domicilio;
 import com.dh.clinica.entity.Paciente;
 import com.dh.clinica.repository.IPacienteRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 @Service
 public class PacienteService implements IPacienteService {
     private final IPacienteRepository pacienteRepository;
+    private static final Logger logger = LoggerFactory.getLogger(PacienteService.class);
 
     public PacienteService(IPacienteRepository pacienteRepository) {
         this.pacienteRepository = pacienteRepository;
@@ -22,9 +25,9 @@ public class PacienteService implements IPacienteService {
 
     @Override
     public PacienteResponseDTO guardar(PacienteRequestDTO nuevoPaciente) {
+        logger.info("Guardando nuevo paciente: {}", nuevoPaciente);
 
         Domicilio domicilio = new Domicilio();
-
         domicilio.setCalle(nuevoPaciente.domicilio().calle());
         domicilio.setNumero(nuevoPaciente.domicilio().numero());
         domicilio.setLocalidad(nuevoPaciente.domicilio().localidad());
@@ -37,27 +40,48 @@ public class PacienteService implements IPacienteService {
         paciente.setFechaIngreso(nuevoPaciente.fechaIngreso());
         paciente.setDomicilio(domicilio);
 
-        return new PacienteResponseDTO(pacienteRepository.save(paciente));
+        PacienteResponseDTO response = new PacienteResponseDTO(pacienteRepository.save(paciente));
+        logger.info("Paciente guardado exitosamente: {}", response);
+
+        return response;
     }
 
     @Override
     public PacienteResponseDTO buscarPorId(Integer id) {
-        return pacienteRepository.findById(id)
+        logger.info("Buscando paciente con ID: {}", id);
+
+        PacienteResponseDTO response = pacienteRepository.findById(id)
                 .map(PacienteResponseDTO::new)
-                .orElseThrow(() -> new EntityNotFoundException("Paciente no encontrado"));
+                .orElseThrow(() -> {
+                    logger.error("Paciente no encontrado con ID: {}", id);
+                    return new EntityNotFoundException("Paciente no encontrado");
+                });
+
+        logger.info("Paciente encontrado: {}", response);
+        return response;
     }
 
     @Override
     public List<PacienteResponseDTO> buscarTodos() {
-        return pacienteRepository.findAll().stream()
+        logger.info("Buscando todos los pacientes");
+
+        List<PacienteResponseDTO> response = pacienteRepository.findAll().stream()
                 .map(PacienteResponseDTO::new)
                 .collect(Collectors.toList());
+
+        logger.info("Número de pacientes encontrados: {}", response.size());
+        return response;
     }
 
     @Override
     public void modificar(PacienteModificarRequestDTO pacienteModificado) {
+        logger.info("Modificando paciente con ID: {}", pacienteModificado.id());
+
         Paciente paciente = pacienteRepository.findById(pacienteModificado.id())
-                .orElseThrow(() -> new EntityNotFoundException("Paciente no encontrado"));
+                .orElseThrow(() -> {
+                    logger.error("Paciente no encontrado con ID: {}", pacienteModificado.id());
+                    return new EntityNotFoundException("Paciente no encontrado");
+                });
 
         // Modificar los campos
         paciente.setNombre(pacienteModificado.nombre());
@@ -66,11 +90,19 @@ public class PacienteService implements IPacienteService {
         paciente.setFechaIngreso(pacienteModificado.fechaIngreso());
 
         pacienteRepository.save(paciente);
+        logger.info("Paciente modificado exitosamente: {}", pacienteModificado);
     }
 
     @Override
     public void eliminar(Integer id) {
-        if (pacienteRepository.existsById(id)) pacienteRepository.deleteById(id);
-        else throw new EntityNotFoundException("Paciente no encontrado");
+        logger.info("Eliminando paciente con ID: {}", id);
+
+        if (pacienteRepository.existsById(id)) {
+            pacienteRepository.deleteById(id);
+            logger.info("Paciente eliminado exitosamente con ID: {}", id);
+        } else {
+            logger.error("Paciente no encontrado con ID: {}", id);
+            throw new EntityNotFoundException("Paciente no encontrado");
+        }
     }
 }

@@ -1,48 +1,63 @@
-//package com.dh.clinica;
-//import com.dh.clinica.dao.impl.PacienteDaoH2;
-//import com.dh.clinica.db.H2Connection;
-//import com.dh.clinica.entity.Domicilio;
-//import com.dh.clinica.entity.Paciente;
-//import com.dh.clinica.service.paciente.PacienteService;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import java.time.LocalDate;
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//class PacienteServiceTest {
-//    static Logger logger = LoggerFactory.getLogger(PacienteServiceTest.class);
-//    PacienteService pacienteService = new PacienteService(new PacienteDaoH2());
-//
-//    @BeforeAll
-//    static void tablas(){
-//        H2Connection.crearTablas();
-//    }
-//
-//
-//    @Test
-//    @DisplayName("Testear que un paciente se guarde en la base de datos con su domicilio")
-//    void caso1(){
-//        //dado
-//        Paciente paciente = new Paciente("Romero","Luciana", "56655", LocalDate.of(2024, 7, 16),
-//                new Domicilio("Falsa", 456, "Cipolleti", "Rio Negro"));
-//        // cuando
-//        Paciente pacienteDesdeDB = pacienteService.guardarPaciente(paciente);
-//        // entonces
-//        assertNotNull(pacienteDesdeDB.getId());
-//    }
-//
-//    @Test
-//    @DisplayName("Testear que un paciente pueda ser obtenido cuando se envia el id")
-//    void caso2(){
-//        //dado
-//        Integer id = 1;
-//        // cuando
-//        Paciente paciente = pacienteService.buscarPorId(id);
-//        // entonces
-//        assertEquals(id, paciente.getId());
-//    }
-//
-//}
+package com.dh.clinica;
+
+import com.dh.clinica.dto.paciente.DomicilioDTO;
+import com.dh.clinica.dto.paciente.PacienteModificarRequestDTO;
+import com.dh.clinica.dto.paciente.PacienteRequestDTO;
+import com.dh.clinica.dto.paciente.PacienteResponseDTO;
+import com.dh.clinica.entity.Domicilio;
+import com.dh.clinica.entity.Paciente;
+import com.dh.clinica.repository.IPacienteRepository;
+import com.dh.clinica.service.paciente.PacienteService;
+import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.LocalDate;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+class PacienteServiceTest {
+    @Autowired
+    private IPacienteRepository pacienteRepository;
+    @Autowired
+    private PacienteService pacienteService;
+
+    PacienteResponseDTO pacienteDesdeDb;
+    DomicilioDTO domicilio = new DomicilioDTO(null,"Falsa", 456, "Cipolleti", "Rio Negro");
+    PacienteRequestDTO paciente =  new PacienteRequestDTO("Romero", "Luciana", "566570", LocalDate.now(), domicilio);
+
+    @BeforeEach
+    void GuardarPaciente() {
+        pacienteDesdeDb = pacienteService.guardar(paciente);
+    }
+
+    @Test
+    void testBuscarPorIdPacienteExistente() {
+        Integer id = pacienteDesdeDb.id();
+        PacienteResponseDTO pacienteEncontrado = pacienteService.buscarPorId(id);
+        assertEquals(id, pacienteEncontrado.id());
+    }
+
+    @Test
+    void testBuscarPorIdPacienteNoExistente() {
+        assertThrows(EntityNotFoundException.class, () -> pacienteService.buscarPorId(999));
+    }
+
+    @Test
+    void testBuscarTodosLosPacientes() {
+        List<PacienteResponseDTO> pacientesEncontrados = pacienteService.buscarTodos();
+        assertNotNull(pacientesEncontrados);
+    }
+
+
+    @Test
+    void testEliminarPacienteExistente() {
+        pacienteService.eliminar(pacienteDesdeDb.id());
+        assertFalse(pacienteRepository.existsById(pacienteDesdeDb.id()));
+    }
+}

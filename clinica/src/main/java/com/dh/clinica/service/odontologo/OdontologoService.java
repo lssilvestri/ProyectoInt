@@ -9,6 +9,8 @@ import com.dh.clinica.entity.Turno;
 import com.dh.clinica.repository.IOdontologoRepository;
 import com.dh.clinica.service.turno.TurnoService;
 import jakarta.persistence.EntityNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +24,8 @@ public class OdontologoService implements IOdontologoService {
     private final IOdontologoRepository odontologoRepository;
     private final TurnoService turnoService;
 
+    private static final Logger logger = LoggerFactory.getLogger(OdontologoService.class);
+
     @Autowired
     public OdontologoService(IOdontologoRepository odontologoRepository, TurnoService turnoService) {
         this.odontologoRepository = odontologoRepository;
@@ -30,6 +34,7 @@ public class OdontologoService implements IOdontologoService {
 
     @Override
     public OdontologoResponseDTO guardar(OdontologoRequestDTO nuevoOdontologo) {
+        logger.info("Guardando un nuevo odontólogo: {}", nuevoOdontologo);
         Odontologo odontologo = new Odontologo();
         odontologo.setNombre(nuevoOdontologo.nombre());
         odontologo.setApellido(nuevoOdontologo.apellido());
@@ -37,27 +42,43 @@ public class OdontologoService implements IOdontologoService {
 
         Odontologo odontologoGuardado = odontologoRepository.save(odontologo);
 
+        logger.info("Odontólogo guardado exitosamente con ID: {}", odontologoGuardado.getId());
         return OdontologoResponseDTO.fromEntity(odontologoGuardado);
     }
 
     @Override
     public OdontologoResponseDTO buscarPorId(Integer id) {
+        logger.info("Buscando odontólogo con ID: {}", id);
         return odontologoRepository.findById(id)
-                .map(OdontologoResponseDTO::fromEntity)
-                .orElseThrow(() -> new EntityNotFoundException("Odontólogo no encontrado"));
+                .map(odontologo -> {
+                    logger.info("Odontólogo encontrado: {}", odontologo);
+                    return OdontologoResponseDTO.fromEntity(odontologo);
+                })
+                .orElseThrow(() -> {
+                    logger.error("Odontólogo no encontrado con ID: {}", id);
+                    throw new EntityNotFoundException("Odontólogo no encontrado");
+                });
     }
 
     @Override
     public List<OdontologoResponseDTO> buscarTodos() {
-        return odontologoRepository.findAll().stream()
+        logger.info("Buscando todos los odontólogos");
+        List<OdontologoResponseDTO> odontologos = odontologoRepository.findAll().stream()
                 .map(OdontologoResponseDTO::fromEntity)
                 .collect(Collectors.toList());
+
+        logger.info("Se encontraron {} odontólogos", odontologos.size());
+        return odontologos;
     }
 
     @Override
     public void modificar(OdontologoModificarRequestDTO odontologoModificado) {
+        logger.info("Modificando el odontólogo con ID: {}", odontologoModificado.id());
         Odontologo odontologoEcontrado = odontologoRepository.findById(odontologoModificado.id())
-                .orElseThrow(() -> new EntityNotFoundException("Odontólogo no encontrado"));
+                .orElseThrow(() -> {
+                    logger.error("Odontólogo no encontrado con ID: {}", odontologoModificado.id());
+                    throw new EntityNotFoundException("Odontólogo no encontrado");
+                });
 
         Set<TurnoResponseDTO> turnosExistentes = turnoService.buscarTurnoOdontologo(odontologoModificado.id());
 
@@ -77,12 +98,18 @@ public class OdontologoService implements IOdontologoService {
         odontologoEcontrado.setTurnos(turnos);
 
         odontologoRepository.save(odontologoEcontrado);
+        logger.info("Odontólogo con ID: {} modificado exitosamente", odontologoEcontrado.getId());
     }
 
     @Override
     public void eliminar(Integer id) {
-        if (odontologoRepository.existsById(id)) odontologoRepository.deleteById(id);
-        else throw new EntityNotFoundException("Odontólogo no encontrado");
-
+        logger.info("Eliminando odontólogo con ID: {}", id);
+        if (odontologoRepository.existsById(id)) {
+            odontologoRepository.deleteById(id);
+            logger.info("Odontólogo con ID: {} eliminado exitosamente", id);
+        } else {
+            logger.error("Odontólogo no encontrado con ID: {}", id);
+            throw new EntityNotFoundException("Odontólogo no encontrado");
+        }
     }
 }

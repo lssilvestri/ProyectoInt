@@ -1,40 +1,52 @@
-//package com.dh.clinica;
-//import com.dh.clinica.dao.impl.OdontologoDaoH2;
-//import com.dh.clinica.db.H2Connection;
-//import com.dh.clinica.entity.Odontologo;
-//import com.dh.clinica.service.odontologo.OdontologoService;
-//import org.junit.jupiter.api.BeforeAll;
-//import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
-//import org.junit.platform.commons.logging.Logger;
-//import org.junit.platform.commons.logging.LoggerFactory;
-//import java.util.ArrayList;
-//import java.util.List;
-//import static org.junit.jupiter.api.Assertions.assertNotNull;
-//import static org.junit.jupiter.api.Assertions.assertTrue;
-//
-//class OdontologoServiceTest {
-//    static Logger logger = LoggerFactory.getLogger(OdontologoServiceTest.class);
-//    OdontologoService odontologoService = new OdontologoService(new OdontologoDaoH2());
-//
-//    @BeforeAll
-//    static void tablas(){
-//        H2Connection.crearTablas();
-//    }
-//
-//    @Test
-//    @DisplayName("Testear que un odontologo se guarde en la base de datos")
-//    void caso1(){
-//        Odontologo odontologo = new Odontologo("asdaw","Luciana", "Gimenez");
-//        Odontologo odontologo1 = odontologoService.guardarOdontologo(odontologo);
-//        assertNotNull(odontologo1.getId());
-//    }
-//
-//    @Test
-//    @DisplayName("Testear que se buscan todos los odontologos")
-//    void caso2(){
-//        List<Odontologo> odontologos = new ArrayList<>();
-//        odontologos = odontologoService.buscarTodos();
-//        assertTrue(odontologos.size()!=0);
-//    }
-//}
+package com.dh.clinica;
+
+import com.dh.clinica.dto.odontologo.OdontologoRequestDTO;
+import com.dh.clinica.dto.odontologo.OdontologoResponseDTO;
+import com.dh.clinica.dto.paciente.PacienteResponseDTO;
+import com.dh.clinica.repository.IOdontologoRepository;
+import com.dh.clinica.service.odontologo.OdontologoService;
+import jakarta.persistence.EntityNotFoundException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest
+class OdontologoServiceTest{
+    @Autowired
+    private IOdontologoRepository odontologoRepository;
+    @Autowired
+    private OdontologoService odontologoService;
+    OdontologoResponseDTO odontologoDesdeDb;
+
+    @BeforeEach
+    void GuardarOdontologo(){
+        OdontologoRequestDTO odontologo = new OdontologoRequestDTO("Miguel", "Arano", "FJH-876");
+        odontologoDesdeDb = odontologoService.guardar(odontologo);
+    }
+
+    @Test
+    void testBuscarPorIdOdontologoExistente(){
+        Integer id = odontologoDesdeDb.id();
+        OdontologoResponseDTO odontologoEncontrado = odontologoService.buscarPorId(id);
+        assertEquals(id, odontologoEncontrado.id());
+    }
+    @Test
+    void testBuscarPorIdPacienteNoExistente() {
+        assertThrows(EntityNotFoundException.class, () -> odontologoService.buscarPorId(999));
+    }
+    @Test
+    void testBuscarTodosLosPacientes() {
+        List<OdontologoResponseDTO> odontologosEncontrados = odontologoService.buscarTodos();
+        assertNotNull(odontologosEncontrados);
+    }
+    @Test
+    void testEliminarPacienteExistente() {
+        odontologoService.eliminar(odontologoDesdeDb.id());
+        assertFalse(odontologoRepository.existsById(odontologoDesdeDb.id()));
+    }
+}
