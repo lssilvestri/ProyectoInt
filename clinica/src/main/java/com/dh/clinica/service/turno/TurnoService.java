@@ -6,15 +6,17 @@ import com.dh.clinica.dto.turno.TurnoModificarRequestDTO;
 import com.dh.clinica.dto.turno.TurnoRequestDTO;
 import com.dh.clinica.dto.turno.TurnoResponseDTO;
 import com.dh.clinica.entity.Turno;
+import com.dh.clinica.exception.BadRequestException;
+import com.dh.clinica.exception.ResourceNotFoundException;
 import com.dh.clinica.repository.ITurnoRepository;
 import com.dh.clinica.service.odontologo.OdontologoService;
 import com.dh.clinica.service.paciente.PacienteService;
-import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -37,16 +39,25 @@ public class TurnoService implements ITurnoService {
     public TurnoResponseDTO guardar(TurnoRequestDTO nuevoTurno) {
         logger.info("Guardando nuevo turno: {}", nuevoTurno);
 
-        PacienteResponseDTO paciente = pacienteService.buscarPorId(nuevoTurno.paciente_id());
-        if (paciente == null) {
+        PacienteResponseDTO paciente;
+        try {
+            paciente = pacienteService.buscarPorId(nuevoTurno.paciente_id());
+        } catch (ResourceNotFoundException e) {
             logger.error("Paciente no encontrado con ID: {}", nuevoTurno.paciente_id());
-            throw new EntityNotFoundException("Paciente no encontrado");
+            throw new BadRequestException("Paciente con ID " + nuevoTurno.paciente_id() + " no existe.");
         }
 
-        OdontologoResponseDTO odontologo = odontologoService.buscarPorId(nuevoTurno.odontologo_id());
-        if (odontologo == null) {
+        OdontologoResponseDTO odontologo;
+        try {
+            odontologo = odontologoService.buscarPorId(nuevoTurno.odontologo_id());
+        } catch (ResourceNotFoundException e) {
             logger.error("Odontólogo no encontrado con ID: {}", nuevoTurno.odontologo_id());
-            throw new EntityNotFoundException("Odontólogo no encontrado");
+            throw new BadRequestException("Odontólogo con ID " + nuevoTurno.odontologo_id() + " no existe.");
+        }
+
+        if (nuevoTurno.fecha().isBefore(LocalDate.now())) {
+            logger.error("La fecha del turno es inválida: {}", nuevoTurno.fecha());
+            throw new BadRequestException("La fecha del turno no puede ser en el pasado");
         }
 
         Turno turno = new Turno();
@@ -68,7 +79,7 @@ public class TurnoService implements ITurnoService {
                 .map(TurnoResponseDTO::new)
                 .orElseThrow(() -> {
                     logger.error("Turno no encontrado con ID: {}", id);
-                    return new EntityNotFoundException("Turno no encontrado");
+                    return new ResourceNotFoundException("Turno no encontrado");
                 });
 
         logger.info("Turno encontrado: {}", response);
@@ -94,20 +105,11 @@ public class TurnoService implements ITurnoService {
         Turno turno = turnoRepository.findById(turnoModificar.id())
                 .orElseThrow(() -> {
                     logger.error("Turno no encontrado con ID: {}", turnoModificar.id());
-                    return new EntityNotFoundException("Turno no encontrado");
+                    return new ResourceNotFoundException("Turno no encontrado");
                 });
 
         PacienteResponseDTO paciente = pacienteService.buscarPorId(turnoModificar.paciente_id());
-        if (paciente == null) {
-            logger.error("Paciente no encontrado con ID: {}", turnoModificar.paciente_id());
-            throw new EntityNotFoundException("Paciente no encontrado");
-        }
-
         OdontologoResponseDTO odontologo = odontologoService.buscarPorId(turnoModificar.odontologo_id());
-        if (odontologo == null) {
-            logger.error("Odontólogo no encontrado con ID: {}", turnoModificar.odontologo_id());
-            throw new EntityNotFoundException("Odontólogo no encontrado");
-        }
 
         turno.setPaciente(paciente.toEntity());
         turno.setOdontologo(odontologo.toEntity());
@@ -126,7 +128,7 @@ public class TurnoService implements ITurnoService {
             logger.info("Turno eliminado exitosamente con ID: {}", id);
         } else {
             logger.error("Turno no encontrado con ID: {}", id);
-            throw new EntityNotFoundException("Turno no encontrado");
+            throw new ResourceNotFoundException("Turno no encontrado");
         }
     }
 

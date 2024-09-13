@@ -5,6 +5,7 @@ import com.dh.clinica.dto.turno.TurnoModificarRequestDTO;
 import com.dh.clinica.dto.turno.TurnoRequestDTO;
 import com.dh.clinica.dto.turno.TurnoResponseDTO;
 import com.dh.clinica.service.turno.TurnoService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +28,9 @@ public class TurnoController {
      * @return Turno guardado con status 201.
      */
     @PostMapping("/guardar")
-    public ResponseEntity<TurnoResponseDTO> guardar(@RequestBody TurnoRequestDTO nuevoTurno) {
-        try {
-            TurnoResponseDTO turnoGuardado = turnoService.guardar(nuevoTurno);
-            return ResponseEntity.status(HttpStatus.CREATED).body(turnoGuardado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+    public ResponseEntity<TurnoResponseDTO> guardar(@Valid @RequestBody TurnoRequestDTO nuevoTurno) {
+        TurnoResponseDTO turnoGuardado = turnoService.guardar(nuevoTurno);
+        return ResponseEntity.status(HttpStatus.CREATED).body(turnoGuardado);
     }
 
     /**
@@ -44,12 +41,8 @@ public class TurnoController {
      */
     @GetMapping("/buscar/{id}")
     public ResponseEntity<TurnoResponseDTO> buscarPorId(@PathVariable Integer id) {
-        try {
-            TurnoResponseDTO turnoEncontrado = turnoService.buscarPorId(id);
-            return ResponseEntity.status(HttpStatus.OK).body(turnoEncontrado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        TurnoResponseDTO turnoEncontrado = turnoService.buscarPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(turnoEncontrado);
     }
 
     /**
@@ -59,12 +52,8 @@ public class TurnoController {
      */
     @GetMapping("/buscar")
     public ResponseEntity<List<TurnoResponseDTO>> buscarTodos() {
-        try {
-            List<TurnoResponseDTO> turnos = turnoService.buscarTodos();
-            return ResponseEntity.status(HttpStatus.OK).body(turnos);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        List<TurnoResponseDTO> turnos = turnoService.buscarTodos();
+        return ResponseEntity.status(HttpStatus.OK).body(turnos);
     }
 
     /**
@@ -74,13 +63,9 @@ public class TurnoController {
      * @return Mensaje de éxito o error.
      */
     @PutMapping("/modificar")
-    public ResponseEntity<MessageResponseDTO> modificar(@RequestBody TurnoModificarRequestDTO turnoModificar) {
-        try {
-            turnoService.modificar(turnoModificar);
-            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El turno fue modificado"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponseDTO(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponseDTO> modificar(@Valid @RequestBody TurnoModificarRequestDTO turnoModificar) {
+        turnoService.modificar(turnoModificar);
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El turno fue modificado"));
     }
 
     /**
@@ -91,11 +76,7 @@ public class TurnoController {
      */
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<MessageResponseDTO> eliminar(@PathVariable Integer id) {
-        try {
-            turnoService.eliminar(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El turno fue eliminado"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponseDTO(e.getMessage()));
-        }
+        turnoService.eliminar(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El turno fue eliminado"));
     }
 }
