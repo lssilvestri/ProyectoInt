@@ -11,6 +11,8 @@ public interface IOdontologoService {
 
     OdontologoResponseDTO buscarPorId(Integer id);
 
+    OdontologoResponseDTO buscarPorMatricula(String matricula);
+
     List<OdontologoResponseDTO> buscarTodos();
 
     void modificar(OdontologoModificarRequestDTO odontologoModificado);

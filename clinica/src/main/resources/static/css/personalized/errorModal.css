@@ -1,0 +1,20 @@
+/* Modal Error */
+.error_modal .modal-content .modal-body {
+    color: #ececec;
+    padding: 0 20px;
+}
+
+.error_modal .modal-content .modal-body .errorModalBtn {
+    display: block;
+    margin: 5px 0;
+    margin-top: 15px;
+    width: fit-content;
+}
+
+.error_modal .modal-content .modal-footer {
+    gap: 15px;
+}
+
+.error_modal .modal-content .modal-footer button {
+    margin: 0;
+}

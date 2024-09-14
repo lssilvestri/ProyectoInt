@@ -1,0 +1,11 @@
+.logo-icon img,
+.logo-text img {
+  width: 35px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.logo-text img {
+  width: 130px;
+}

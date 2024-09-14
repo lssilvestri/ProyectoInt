@@ -21,10 +21,9 @@ import java.util.stream.Collectors;
 @Service
 public class OdontologoService implements IOdontologoService {
 
+    private static final Logger logger = LoggerFactory.getLogger(OdontologoService.class);
     private final IOdontologoRepository odontologoRepository;
     private final TurnoService turnoService;
-
-    private static final Logger logger = LoggerFactory.getLogger(OdontologoService.class);
 
     @Autowired
     public OdontologoService(IOdontologoRepository odontologoRepository, TurnoService turnoService) {
@@ -56,6 +55,20 @@ public class OdontologoService implements IOdontologoService {
                 })
                 .orElseThrow(() -> {
                     logger.error("Odontólogo no encontrado con ID: {}", id);
+                    throw new EntityNotFoundException("Odontólogo no encontrado");
+                });
+    }
+
+    @Override
+    public OdontologoResponseDTO buscarPorMatricula(String matricula) {
+        logger.info("Buscando odontólogo con matrícula: {}", matricula);
+        return odontologoRepository.findByMatricula(matricula)
+                .map(odontologo -> {
+                    logger.info("Odontólogo encontrado: {}", odontologo);
+                    return OdontologoResponseDTO.fromEntity(odontologo);
+                })
+                .orElseThrow(() -> {
+                    logger.error("Odontólogo no encontrado con matrícula: {}", matricula);
                     throw new EntityNotFoundException("Odontólogo no encontrado");
                 });
     }

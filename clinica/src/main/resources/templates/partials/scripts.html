@@ -1,0 +1,27 @@
+<article th:fragment="scripts">
+    <script th:src="@{/libs/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{/libs/inputmask/dist/jquery.inputmask.min.js}"></script>
+    <script th:src="@{/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/libs/simplebar/dist/simplebar.min.js}"></script>
+    <script th:src="@{/libs/iconify-icon/dist/iconify-icon.min.js}"></script>
+    <script th:src="@{/libs/jquery-sparkline/jquery.sparkline.min.js}"></script>
+
+    <script th:src="@{/js/app.min.js}"></script>
+    <script th:src="@{/js/app.horizontal.init.js}"></script>
+    <script th:src="@{/js/app.dark.init.js}"></script>
+    <script th:src="@{/js/sidebarmenu.js}"></script>
+    <script th:src="@{/js/theme.js}"></script>
+    <script th:src="@{/js/feather.min.js}"></script>
+    <script th:src="@{/js/breadcrumb/breadcrumbChart.js}"></script>
+    <script th:src="@{/js/forms/mask.init.js}"></script>
+    <script th:src="@{/js/forms/custom-validation-init.js}"></script>
+    <script th:src="@{/js/extra-libs/jqbootstrapvalidation/validation.js}"></script>
+
+
+    <script>
+        function handleColorTheme(e) {
+            $("html").attr("data-color-theme", e);
+            $(e).prop("checked", !0);
+        }
+    </script>
+</article>

@@ -1,0 +1,44 @@
+/* Form Login */
+
+#registerForm .login_input_phone {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+}
+
+#registerForm .login_input_phone #inputPhoneNumber {
+    width: 65%;
+    margin-right: 10px;
+}
+
+#registerForm .login_input_phone div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 35%;
+    padding-left: 20px;
+}
+
+#registerForm .login_input_phone div img {
+    width: 26px;
+}
+
+#registerForm .login_input_phone div input {
+    width: 100%;
+}
+
+.edit_input_phone {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 14px;
+}
+
+.edit_input_phone img {
+    width: 26px;
+    margin: 0;
+    padding: 0;
+}
+
+.edit_input_phone select {
+    width: calc(100% - 36px);
+}

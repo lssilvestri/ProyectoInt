@@ -55,6 +55,22 @@ public class OdontologoController {
     }
 
     /**
+     * Busca un Odontologo por su matricula.
+     *
+     * @param matricula Matricula del odontólogo.
+     * @return Odontólogo encontrado o status 404 si no existe.
+     */
+    @GetMapping("/buscar/matricula/{matricula}")
+    public ResponseEntity<OdontologoResponseDTO> buscarPorMatricula(@PathVariable String matricula) {
+        try {
+            OdontologoResponseDTO odontologo = odontologoService.buscarPorMatricula(matricula);
+            return ResponseEntity.status(HttpStatus.OK).body(odontologo);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    /**
      * Lista todos los Odontologos.
      *
      * @return Lista de odontólogos.

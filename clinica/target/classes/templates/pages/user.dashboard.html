@@ -1,0 +1,160 @@
+<section th:fragment="content">
+    <div class="row">
+        <div class="card w-100">
+            <div class="card-body">
+                <div class="action-btn layout-top-spacing mb-7 d-flex align-items-center justify-content-between">
+                    <h5 class="mb-0 fs-5 fw-semibold">Lista de Odontologos</h5>
+                    <a id="add-list" href="/user-create" class="btn btn-primary">Crear nuevo</a>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table border text-nowrap customize-table mb-0 align-middle">
+                        <thead class="text-dark fs-4">
+                            <tr>
+                                <th>
+                                    <h6 class="fs-4 fw-semibold mb-0">Matricula</h6>
+                                </th>
+                                <th>
+                                    <h6 class="fs-4 fw-semibold mb-0">Usuario</h6>
+                                </th>
+                                <th>
+                                    <h6 class="fs-4 fw-semibold mb-0">Rol</h6>
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="container-users"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const handlerEliminate = (id) => {
+            console.log("id", id);
+
+            // Si todo está validado correctamente, enviar la petición
+            const messages = {
+                success: {
+                    title: "🟢 Éxito",
+                    text: `La eliminación se realizó con exito.`,
+                    redirect: {
+                        href: `/user-dashboard`,
+                        text: "Recargar",
+                    },
+                },
+                failure: {
+                    title: "🔴 Error",
+                    text: `Problemas al eliminar el usuario.`,
+                },
+            };
+
+            fetchData(`/odontologo/eliminar/${id}`, "DELETE", messages, JSON.stringify({ id }));
+        };
+
+        document.addEventListener("DOMContentLoaded", async (event) => {
+            const $containerUsers = document.getElementById("container-users");
+
+            const imagesProfile = [
+                "user-1.jpg",
+                "user-2.jpg",
+                "user-3.jpg",
+                "user-4.jpg",
+                "user-5.jpg",
+                "user-6.jpg",
+                "user-7.jpg",
+                "user-8.jpg",
+                "user-9.jpg",
+                "user-10.jpg",
+                "user-11.jpg",
+                "user-12.jpg",
+            ];
+
+            const responseOdontologos = await fetch(`/odontologo/buscar`);
+            const resOdontologos = await responseOdontologos.json();
+
+            const arrayUsersElements = resOdontologos.map((user) => {
+                const isOdontologo = user.hasOwnProperty("matricula");
+                const randomIndex = Math.floor(Math.random() * imagesProfile.length);
+
+                const element = `<tr>
+                                    <td>
+                                        <span
+                                            class="badge bg-success-subtle text-success fw-semibold fs-2 gap-1 d-inline-flex align-items-center">
+                                            <i class="ti ti-circle fs-3"></i>
+                                            ${isOdontologo ? user.matricula : user.dni}
+                                            </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img
+                                                src="/images/profile/${imagesProfile[randomIndex]}"
+                                                class="rounded-circle"
+                                                width="40"
+                                                height="40"
+                                            />
+                                            <div class="ms-3">
+                                                <h6 class="fs-4 fw-semibold mb-0">${user.nombre} ${user.apellido}</h6>
+                                                <span class="fw-normal">@${user.nombre}_${user.id}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            ${
+                                                isOdontologo
+                                                    ? `<span class="badge bg-primary-subtle text-primary fw-semibold fs-2">Odontologo</span>`
+                                                    : `<span class="badge bg-success-subtle text-success fw-semibold fs-2">Paciente</span>`
+                                            }
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown dropstart">
+                                            <a
+                                                href="#"
+                                                class="text-muted"
+                                                id="dropdownMenuButton"
+                                                data-bs-toggle="dropdown"
+                                                aria-expanded="false"
+                                            >
+                                                <i class="ti ti-dots fs-5"></i>
+                                            </a>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <li>
+                                                    <a class="dropdown-item d-flex align-items-center gap-3" 
+                                                        href="/user-modify?id=${user.matricula}"
+                                                        >
+                                                        <i class="fs-4 ti ti-edit"></i>Edit
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <button id="delete-${
+                                                        user.id
+                                                    }" class="dropdown-item d-flex align-items-center gap-3"
+                                                        ><i class="fs-4 ti ti-trash"></i>Delete</
+                                                    >
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>`;
+
+                return element;
+            });
+
+            $containerUsers.innerHTML = arrayUsersElements.join("");
+
+            // Añade los event listeners a los botones de eliminación
+            resOdontologos.forEach((user) => {
+                const deleteButton = document.getElementById(`delete-${user.id}`);
+                if (deleteButton) {
+                    deleteButton.addEventListener("click", () => handlerEliminate(user.id));
+                }
+            });
+        });
+    </script>
+</section>

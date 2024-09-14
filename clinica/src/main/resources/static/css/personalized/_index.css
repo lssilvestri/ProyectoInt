@@ -1,0 +1,8 @@
+@import url("./form.css");
+@import url("./errorModal.css");
+@import url("./logo.css");
+@import url("./header.css");
+
+#main-wrapper {
+    min-height: calc(100vh - 53px) !important;
+}

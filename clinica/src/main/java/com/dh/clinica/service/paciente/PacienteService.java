@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class PacienteService implements IPacienteService {
-    private final IPacienteRepository pacienteRepository;
     private static final Logger logger = LoggerFactory.getLogger(PacienteService.class);
+    private final IPacienteRepository pacienteRepository;
 
     public PacienteService(IPacienteRepository pacienteRepository) {
         this.pacienteRepository = pacienteRepository;
@@ -54,6 +54,21 @@ public class PacienteService implements IPacienteService {
                 .map(PacienteResponseDTO::new)
                 .orElseThrow(() -> {
                     logger.error("Paciente no encontrado con ID: {}", id);
+                    return new EntityNotFoundException("Paciente no encontrado");
+                });
+
+        logger.info("Paciente encontrado: {}", response);
+        return response;
+    }
+
+    @Override
+    public PacienteResponseDTO buscarPorDni(String dni) {
+        logger.info("Buscando paciente con DNI: {}", dni);
+
+        PacienteResponseDTO response = pacienteRepository.findByDni(dni)
+                .map(PacienteResponseDTO::new)
+                .orElseThrow(() -> {
+                    logger.error("Paciente no encontrado con DNI: {}", dni);
                     return new EntityNotFoundException("Paciente no encontrado");
                 });
 

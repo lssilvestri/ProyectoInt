@@ -54,6 +54,23 @@ public class PacienteController {
     }
 
     /**
+     * Busca un Paciente por su dni.
+     *
+     * @param dni Dni del paciente.
+     * @return Paciente encontrado o status 404 si no existe.
+     */
+
+    @GetMapping("/buscar/dni/{dni}")
+    public ResponseEntity<?> buscarPorDni(@PathVariable String dni) {
+        try {
+            PacienteResponseDTO pacienteEncontrado = pacienteService.buscarPorDni(dni);
+            return ResponseEntity.status(HttpStatus.OK).body(pacienteEncontrado);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+    }
+
+    /**
      * Lista todos los Pacientes.
      *
      * @return Lista de pacientes.

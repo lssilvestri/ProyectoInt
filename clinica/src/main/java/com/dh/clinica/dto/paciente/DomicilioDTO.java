@@ -5,7 +5,7 @@ import com.dh.clinica.entity.Domicilio;
 public record DomicilioDTO(
         Long id,
         String calle,
-        Integer numero,
+        String numero,
         String localidad,
         String provincia) {
 

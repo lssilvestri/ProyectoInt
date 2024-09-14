@@ -15,7 +15,7 @@ public class Domicilio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String calle;
-    private Integer numero;
+    private String numero;
     private String localidad;
     private String provincia;
 }

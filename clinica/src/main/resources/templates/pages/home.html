@@ -1,0 +1,102 @@
+<section th:fragment="content">
+    <div class="row">
+        <div class="card w-100">
+            <div class="card-body">
+                <h4 class="card-title">Listado de usuarios</h4>
+                <div class="table-responsive">
+                    <table class="table border text-nowrap customize-table mb-0 align-middle">
+                        <thead class="text-dark fs-4">
+                            <tr>
+                                <th>
+                                    <h6 class="fs-4 fw-semibold mb-0">DNI / Matricula</h6>
+                                </th>
+                                <th>
+                                    <h6 class="fs-4 fw-semibold mb-0">Usuario</h6>
+                                </th>
+                                <th>
+                                    <h6 class="fs-4 fw-semibold mb-0">Rol</h6>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="container-users"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async (event) => {
+            const $containerUsers = document.getElementById("container-users");
+
+            const imagesProfile = [
+                "user-1.jpg",
+                "user-2.jpg",
+                "user-3.jpg",
+                "user-4.jpg",
+                "user-5.jpg",
+                "user-6.jpg",
+                "user-7.jpg",
+                "user-8.jpg",
+                "user-9.jpg",
+                "user-10.jpg",
+                "user-11.jpg",
+                "user-12.jpg",
+            ];
+
+            const responseOdontologos = await fetch(`/odontologo/buscar`);
+            const resOdontologos = await responseOdontologos.json();
+
+            const responsePacientes = await fetch(`/paciente/buscar`);
+            const resPacientes = await responsePacientes.json();
+
+            const responseUsers = [...resOdontologos, ...resPacientes];
+            const shuffledUsers = responseUsers.sort(() => Math.random() - 0.5);
+
+            const arrayUsersElements = shuffledUsers.map((user) => {
+                const isOdontologo = user.hasOwnProperty("matricula");
+                const randomIndex = Math.floor(Math.random() * imagesProfile.length);
+
+                const element = `<tr>
+                                    <td>
+                                        <span
+                                            class="badge bg-success-subtle text-success fw-semibold fs-2 gap-1 d-inline-flex align-items-center">
+                                            <i class="ti ti-circle fs-3"></i>
+                                            ${isOdontologo ? user.matricula : user.dni}
+                                            </span>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <img
+                                                src="/images/profile/${imagesProfile[randomIndex]}"
+                                                class="rounded-circle"
+                                                width="40"
+                                                height="40"
+                                            />
+                                            <div class="ms-3">
+                                                <h6 class="fs-4 fw-semibold mb-0">${user.nombre} ${user.apellido}</h6>
+                                                <span class="fw-normal">@${user.nombre}_${user.id}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            ${
+                                                isOdontologo
+                                                    ? `<span class="badge bg-primary-subtle text-primary fw-semibold fs-2">Odontologo</span>`
+                                                    : `<span class="badge bg-success-subtle text-success fw-semibold fs-2">Paciente</span>`
+                                            }
+                                        </div>
+                                    </td>
+                                </tr>`;
+
+                return element;
+            });
+
+            $containerUsers.innerHTML = arrayUsersElements.join("");
+        });
+    </script>
+</section>

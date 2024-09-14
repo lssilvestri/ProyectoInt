@@ -1,0 +1,31 @@
+[data-layout="vertical"] body .page-wrapper {
+    margin-left: 0 !important;
+}
+
+[data-layout="vertical"] .topbar {
+    width: 100% !important;
+}
+
+.with-vertical {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.topbar .navbar {
+    width: 100%;
+    max-width: 1300px;
+}
+
+.topbar .navbar .navbar-nav .nav-item .nav-link img {
+    width: 40px;
+    height: 40px;
+    background-color: #fff7ed;
+    padding: 2px;
+    border-radius: 50%;
+}
+
+#Header_userImage {
+    background-color: transparent;
+    padding: 0;
+}

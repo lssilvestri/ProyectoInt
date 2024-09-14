@@ -11,6 +11,8 @@ public interface IPacienteService {
 
     PacienteResponseDTO buscarPorId(Integer id);
 
+    PacienteResponseDTO buscarPorDni(String dni);
+
     List<PacienteResponseDTO> buscarTodos();
 
     void modificar(PacienteModificarRequestDTO nuevoPaciente);

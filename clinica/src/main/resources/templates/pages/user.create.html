@@ -1,0 +1,590 @@
+<main th:fragment="content">
+    <div id="main-wrapper">
+        <div
+            class="position-relative overflow-hidden radial-gradient min-vh-100 w-100 d-flex align-items-center justify-content-center"
+        >
+            <div class="d-flex align-items-center justify-content-center w-100">
+                <div class="row justify-content-center w-100 pt-4 pb-4">
+                    <div class="col-md-14 col-lg-10 col-xl-10 col-xxl-10">
+                        <div class="card mb-0">
+                            <div class="card-body p-3">
+                                <form class="row" id="registerUserForm" novalidate>
+                                    <div class="col-lg-6 d-flex align-items-stretch" enctype="multipart/form-data">
+                                        <div class="card w-100 position-relative overflow-hidden mb-0">
+                                            <div class="card-body p-4">
+                                                <h5 class="card-title fw-semibold">Configurar usuario</h5>
+
+                                                <p class="card-subtitle mb-4">Cambia tu foto de perfil desde aquí</p>
+
+                                                <div class="text-center">
+                                                    <img
+                                                        alt=""
+                                                        class="img-fluid rounded-circle"
+                                                        height="120"
+                                                        id="image_profile"
+                                                        th:src="@{/images/profile/user-0.png}"
+                                                        width="120"
+                                                    />
+
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-center my-4 gap-3"
+                                                    >
+                                                        <label class="btn btn-secondary" for="image">Agregar</label>
+                                                        <input
+                                                            accept="image/*"
+                                                            id="image"
+                                                            name="image"
+                                                            required
+                                                            style="display: none"
+                                                            type="file"
+                                                        />
+                                                    </div>
+
+                                                    <p class="mb-0">JPG, GIF o PNG permitidos. Tamaño máximo de 800K</p>
+                                                </div>
+
+                                                <div class="card shadow-none">
+                                                    <div class="card-body">
+                                                        <h4 class="fw-semibold mb-3">Fotos de perfil prediseñadas</h4>
+                                                        <div class="row" id="containerPhotos"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 d-flex align-items-stretch">
+                                        <div class="card w-100 position-relative overflow-hidden mb-0">
+                                            <div class="card-body p-4">
+                                                <h5 class="card-title fw-semibold">Detalles personales</h5>
+
+                                                <p class="card-subtitle mb-4">
+                                                    Para cambiar tus datos personales, edítalo y guárdalo desde aquí
+                                                </p>
+
+                                                <div>
+                                                    <div class="col">
+                                                        <div class="mb-4">
+                                                            <label class="form-label fw-semibold"
+                                                                >Tipo de usuario</label
+                                                            >
+                                                            <select
+                                                                aria-label="Default select example"
+                                                                class="form-select"
+                                                                id="userType"
+                                                                name="userType"
+                                                                required
+                                                            >
+                                                                <option selected value="odontologo">Odontólogo</option>
+                                                                <option value="paciente">Paciente</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-6">
+                                                            <div class="mb-4">
+                                                                <label class="form-label fw-semibold" for="name">
+                                                                    Nombre
+                                                                </label>
+
+                                                                <div class="controls">
+                                                                    <input
+                                                                        aria-invalid="false"
+                                                                        autocomplete="given-name"
+                                                                        class="form-control"
+                                                                        data-validation-required-message="Este campo es requerido"
+                                                                        id="name"
+                                                                        name="name"
+                                                                        placeholder="Ingresa tu nombre"
+                                                                        required
+                                                                        type="name"
+                                                                    />
+                                                                    <div class="help-block"></div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="mb-4">
+                                                                <label class="form-label fw-semibold" for="last_name">
+                                                                    Apellido
+                                                                </label>
+
+                                                                <input
+                                                                    aria-invalid="false"
+                                                                    autocomplete="family-name"
+                                                                    class="form-control"
+                                                                    data-validation-required-message="Este campo es requerido"
+                                                                    id="last_name"
+                                                                    name="last_name"
+                                                                    placeholder="Ingresa tu apellido"
+                                                                    required
+                                                                    type="lastname"
+                                                                />
+                                                                <div class="help-block"></div>
+                                                            </div>
+
+                                                            <div class="mb-4">
+                                                                <label class="form-label fw-semibold" for="document">
+                                                                    DNI
+                                                                </label>
+
+                                                                <input
+                                                                    aria-invalid="false"
+                                                                    class="form-control"
+                                                                    data-validation-required-message="Este campo es requerido"
+                                                                    id="document"
+                                                                    name="document"
+                                                                    placeholder="Ingresa tu DNI"
+                                                                    required
+                                                                    type="text"
+                                                                />
+                                                                <div class="help-block"></div>
+                                                            </div>
+
+                                                            <div class="mb-4">
+                                                                <label class="form-label fw-semibold" for="date">
+                                                                    Fehca de ingreso
+                                                                </label>
+
+                                                                <input
+                                                                    aria-invalid="false"
+                                                                    class="form-control"
+                                                                    data-validation-required-message="Este campo es requerido"
+                                                                    id="date"
+                                                                    name="date"
+                                                                    required
+                                                                    type="date"
+                                                                    value="2018-05-13"
+                                                                />
+                                                                <div class="help-block"></div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-lg-6">
+                                                            <div class="mb-4">
+                                                                <label
+                                                                    class="form-label fw-semibold"
+                                                                    for="country_phone"
+                                                                >
+                                                                    Pais
+                                                                </label>
+
+                                                                <div class="row edit_input_phone">
+                                                                    <img
+                                                                        alt=""
+                                                                        class=""
+                                                                        id="country_image"
+                                                                        th:src="@{/images/svgs/flag.svg}"
+                                                                    />
+
+                                                                    <select
+                                                                        aria-invalid="false"
+                                                                        aria-label="Default select example"
+                                                                        class="form-select"
+                                                                        data-validation-required-message="Este campo es requerido"
+                                                                        id="country_phone"
+                                                                        name="country_phone"
+                                                                        required
+                                                                    ></select>
+
+                                                                    <div class="help-block"></div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="mb-4">
+                                                                <label class="form-label fw-semibold" for="city">
+                                                                    Ciudad
+                                                                </label>
+
+                                                                <input
+                                                                    aria-invalid="false"
+                                                                    class="form-control"
+                                                                    data-validation-required-message="Este campo es requerido"
+                                                                    id="city"
+                                                                    inputmode="text"
+                                                                    name="city"
+                                                                    placeholder="Ingresa tu ciudad"
+                                                                    required
+                                                                    type="text"
+                                                                />
+                                                                <div class="help-block"></div>
+                                                            </div>
+
+                                                            <div class="mb-4">
+                                                                <label class="form-label fw-semibold" for="province">
+                                                                    Provincia
+                                                                </label>
+
+                                                                <input
+                                                                    aria-invalid="false"
+                                                                    class="form-control"
+                                                                    data-validation-required-message="Este campo es requerido"
+                                                                    id="province"
+                                                                    inputmode="text"
+                                                                    name="province"
+                                                                    placeholder="Ingresa tu provincia"
+                                                                    required
+                                                                    type="text"
+                                                                />
+                                                                <div class="help-block"></div>
+                                                            </div>
+
+                                                            <div class="mb-4">
+                                                                <label
+                                                                    class="form-label fw-semibold"
+                                                                    for="street_number"
+                                                                >
+                                                                    Calle & numero
+                                                                </label>
+
+                                                                <input
+                                                                    aria-invalid="false"
+                                                                    class="form-control purchase-inputmask"
+                                                                    data-validation-required-message="Este campo es requerido"
+                                                                    id="street_number"
+                                                                    name="street_number"
+                                                                    placeholder="Ingresa tu dirección"
+                                                                    required
+                                                                    type="text"
+                                                                />
+                                                                <div class="help-block"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="card-body p-4">
+                                                <h5 class="card-title fw-semibold">Asigna la contraseña</h5>
+
+                                                <p class="card-subtitle mb-4">
+                                                    Para asignar su contraseña por favor confirme aquí
+                                                </p>
+
+                                                <div>
+                                                    <div class="mb-4">
+                                                        <label class="form-label fw-semibold" for="password">
+                                                            Contraseña
+                                                        </label>
+
+                                                        <input
+                                                            aria-invalid="false"
+                                                            class="form-control"
+                                                            data-validation-required-message="Este campo es requerido"
+                                                            id="password"
+                                                            name="password"
+                                                            required
+                                                            type="password"
+                                                        />
+                                                    </div>
+
+                                                    <div class="">
+                                                        <label class="form-label fw-semibold" for="confirm_password">
+                                                            Confirmar contraseña
+                                                        </label>
+
+                                                        <input
+                                                            aria-invalid="false"
+                                                            class="form-control"
+                                                            data-validation-required-message="Este campo es requerido"
+                                                            id="confirm_password"
+                                                            name="confirm_password"
+                                                            required
+                                                            type="password"
+                                                        />
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12">
+                                                    <div
+                                                        class="d-flex align-items-center justify-content-end mt-4 gap-3"
+                                                    >
+                                                        <button class="btn btn-info rounded-pill px-4" type="submit">
+                                                            Guardar
+                                                        </button>
+                                                        <button class="btn btn-danger rounded-pill px-4" type="reset">
+                                                            Cancelar
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            /* ----- Fetch Data ------ */
+            const countriesRes = await fetch(`/data/country.data.json`);
+            const countriesResponse = await countriesRes.json();
+
+            /* ----- Form User ------ */
+
+            const $registerUserForm = document.getElementById("registerUserForm");
+
+            const $inputImage = $registerUserForm.querySelector("#image");
+            const $image = $registerUserForm.querySelector("#image_profile");
+            const $containerPhotos = $registerUserForm.querySelector("#containerPhotos");
+
+            const $inputTypeUser = $registerUserForm.querySelector("#userType");
+
+            const $inputName = $registerUserForm.querySelector("#name");
+            const $inputLastname = $registerUserForm.querySelector("#last_name");
+            const $inputDocument = $registerUserForm.querySelector("#document");
+            const $labelDocument = $registerUserForm.querySelector("label[for='document']");
+            const $inputDate = $registerUserForm.querySelector("#date");
+            const $inputCountryPhone = $registerUserForm.querySelector("#country_phone");
+            const $inputCountryImage = $registerUserForm.querySelector("#country_image");
+
+            const $inputCity = $registerUserForm.querySelector("#city");
+            const $imputProvince = $registerUserForm.querySelector("#province");
+            const $imputStreetNumber = $registerUserForm.querySelector("#street_number");
+
+            const $inputPassword = $registerUserForm.querySelector("#password");
+            const $inputConfirmPassword = $registerUserForm.querySelector("#confirm_password");
+
+            const imagesProfile = [
+                "user-1.jpg",
+                "user-2.jpg",
+                "user-3.jpg",
+                "user-4.jpg",
+                "user-5.jpg",
+                "user-6.jpg",
+                "user-7.jpg",
+                "user-8.jpg",
+                "user-9.jpg",
+                "user-10.jpg",
+                "user-11.jpg",
+                "user-12.jpg",
+            ];
+
+            const buttonsProfile = imagesProfile.map((item) => {
+                let urlImage = `/images/profile/${item}`;
+
+                return `
+                    <div class="col-3 p-2">
+                        <button type="button" class="bg-transparent border-0 m-0 p-0" onclick="selectImage('${urlImage}')" >
+                            <img src=${urlImage} alt="" class="rounded-2 img-fluid m-0">
+                        </button>
+                    </div>`;
+            });
+
+            $containerPhotos.innerHTML = buttonsProfile.join("");
+
+            const randomIndex = Math.floor(Math.random() * imagesProfile.length);
+            $image.src = `/images/profile/${imagesProfile[randomIndex]}`;
+
+            const img = await loadImage($image.src);
+            const urlImage = $image.src;
+            const fileNameImage = urlImage.substring(urlImage.lastIndexOf("/") + 1);
+            const extension = `image/${fileNameImage.split(".").pop().toLowerCase()}`;
+
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const fileListPromise = new Promise((resolve) => {
+                canvas.toBlob((blob) => {
+                    const file = new File([blob], fileNameImage, {
+                        type: extension,
+                    });
+
+                    const fileList = new DataTransfer();
+                    fileList.items.add(file);
+
+                    resolve(fileList);
+                }, extension);
+            });
+
+            const fileList = await fileListPromise;
+            $inputImage.files = fileList.files;
+
+            $inputDate.value = new Date().toISOString().split("T")[0];
+
+            const countriesArray = Object.keys(countriesResponse).map((key) => {
+                countriesResponse[key]["code"] = key;
+                return countriesResponse[key];
+            });
+
+            const optionsCountry = countriesArray.map((item) => {
+                return `<option value="${item.phone[0]}">${item.name}</option>`;
+            });
+
+            $inputCountryPhone.innerHTML = optionsCountry.join("");
+
+            /* ----- Eventos del formulario ----- */
+
+            // Cambiar la imagen de la bandera del país
+            $inputCountryPhone.addEventListener("change", function () {
+                const country = countriesArray.find((item) => item.phone[0] === this.value);
+                $inputCountryImage.src = country.image;
+            });
+
+            // Cambiar el tipo de documento
+            $inputTypeUser.addEventListener("change", function () {
+                const value = this.value;
+
+                switch (value) {
+                    case "odontologo":
+                        $labelDocument.textContent = "Matrícula";
+                        $inputDocument.setAttribute("placeholder", "Ingresa tu matrícula");
+
+                        $inputDate.setAttribute("disabled", true);
+                        $inputCountryPhone.setAttribute("disabled", true);
+                        $inputCity.setAttribute("disabled", true);
+                        $inputCity.setAttribute("disabled", true);
+                        $imputProvince.setAttribute("disabled", true);
+                        $imputStreetNumber.setAttribute("disabled", true);
+                        break;
+
+                    case "paciente":
+                        $labelDocument.textContent = "DNI";
+                        $inputDocument.setAttribute("placeholder", "Ingresa tu DNI");
+
+                        $inputCity.removeAttribute("disabled");
+                        $imputProvince.removeAttribute("disabled");
+                        $imputStreetNumber.removeAttribute("disabled");
+                        break;
+
+                    default:
+                        break;
+                }
+            });
+
+            // Enviar el formulario
+            $registerUserForm.addEventListener("submit", async function (event) {
+                event.preventDefault();
+
+                const typeUser = $inputTypeUser.value;
+
+                let user = {};
+                let endpoint = "";
+                let validation = false;
+
+                switch (typeUser) {
+                    case "odontologo":
+                        endpoint = `/odontologo/guardar`;
+                        user = {
+                            imagen: $image.src.replace("/", ""),
+                            nombre: validateInput($inputName.value),
+                            apellido: validateInput($inputLastname.value),
+                            matricula: validateDocument($inputDocument.value),
+                            password: validatePassword($inputPassword.value),
+                        };
+                        validation = Object.values(user).every((item) => item !== null);
+                        break;
+
+                    case "paciente":
+                        endpoint = `/paciente/guardar`;
+                        user = {
+                            imagen: $image.src.replace("/", ""),
+                            nombre: validateInput($inputName.value),
+                            apellido: validateInput($inputLastname.value),
+                            dni: validateDocument($inputDocument.value),
+                            fechaIngreso: validateInput($inputDate.value),
+                            domicilio: {
+                                pais: validateInput($inputCountryPhone.value),
+                                ciudad: validateInput($inputCity.value),
+                                provincia: validateInput($imputProvince.value),
+                                calle: validateInput($imputStreetNumber.value.split(" ")[0]),
+                                numero: validateInput($imputStreetNumber.value.split(" ")[1]),
+                            },
+                            password: validatePassword($inputPassword.value),
+                        };
+                        validation =
+                            Object.values(user).every((item) => item !== null) &&
+                            Object.values(user.domicilio).every((item) => item !== null);
+                        break;
+
+                    default:
+                        break;
+                }
+
+                // Validar los campos
+                if (!validation) return;
+
+                // Verificar si las contraseñas coinciden
+                if (user.password !== validatePassword($inputConfirmPassword.value)) {
+                    const title = "🔴 Error";
+                    const text = `Las contraseñas no coinciden.`;
+
+                    alertModal(title, text);
+                    return;
+                }
+
+                // Si todo está validado correctamente, enviar la petición
+                const messages = {
+                    success: {
+                        title: "🟢 Éxito",
+                        text: `Creación de perfil exitosa.`,
+                        redirect: {
+                            href: `/Regresar`,
+                            text: "Volver al CRUD",
+                        },
+                    },
+                    failure: {
+                        title: "🔴 Error",
+                        text: `Problemas en crear el perfil.`,
+                    },
+                };
+
+                // Enviar los datos
+                fetchData(endpoint, "POST", messages, JSON.stringify(user));
+            });
+        });
+
+        async function selectImage(src) {
+            const $registerUserForm = document.getElementById("registerUserForm");
+            const $inputImage = $registerUserForm.querySelector("#image");
+            const $image = $registerUserForm.querySelector("#image_profile");
+
+            $image.src = src;
+
+            const img = await loadImage($image.src);
+            const urlImage = $image.src;
+            const fileNameImage = urlImage.substring(urlImage.lastIndexOf("/") + 1);
+            const extension = `image/${fileNameImage.split(".").pop().toLowerCase()}`;
+
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const fileListPromise = new Promise((resolve) => {
+                canvas.toBlob((blob) => {
+                    const file = new File([blob], fileNameImage, {
+                        type: extension,
+                    });
+
+                    const fileList = new DataTransfer();
+                    fileList.items.add(file);
+
+                    resolve(fileList);
+                }, extension);
+            });
+
+            const fileList = await fileListPromise;
+            $inputImage.files = fileList.files;
+        }
+
+        // Función para cargar la imagen
+        function loadImage(url) {
+            return new Promise((resolve, reject) => {
+                const img = new Image();
+                img.onload = () => resolve(img);
+                img.onerror = reject;
+                img.src = url;
+            });
+        }
+    </script>
+</main>

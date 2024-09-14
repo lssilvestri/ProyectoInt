@@ -1,0 +1,193 @@
+<main th:fragment="content">
+    <div id="main-wrapper">
+        <div class="position-relative overflow-hidden radial-gradient min-vh-100 w-100">
+            <div class="position-relative z-3">
+                <div class="row">
+                    <div class="col-xl-7 col-xxl-8">
+                        <a class="text-nowrap logo-img d-block px-4 py-9 w-100" href="/static">
+                            <b class="logo-icon">
+                                <!-- Dark Logo icon -->
+                                <img alt="homepage" class="dark-logo" th:src="@{/images/logos/logo-light-icon.svg}" />
+                                <!-- Light Logo icon -->
+                                <img alt="homepage" class="light-logo" th:src="@{/images/logos/logo-light-icon.svg}" />
+                            </b>
+                        </a>
+
+                        <div
+                            class="d-none d-xl-flex align-items-center justify-content-center"
+                            style="height: calc(100vh - 80px)"
+                        >
+                            <img
+                                alt=""
+                                class="img-fluid"
+                                th:src="@{/images/background/login-security.svg}"
+                                width="600"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="col-xl-5 col-xxl-4">
+                        <div
+                            class="authentication-login min-vh-100 bg-body row justify-content-center align-items-center p-4"
+                        >
+                            <div class="auth-max-width col-sm-8 col-md-6 col-xl-9">
+                                <h2 class="mb-1 fs-7 fw-bolder">Biembenidos a la clínica odontológica</h2>
+                                <p class="mb-4">tu administrador de citas</p>
+
+                                <div class="position-relative text-center my-4">
+                                    <p class="mb-0 fs-4 px-3 d-inline-block bg-white text-dark z-3 position-relative">
+                                        ingresa tus credenciales
+                                    </p>
+                                    <span
+                                        class="border-top w-100 position-absolute top-50 start-50 translate-middle"
+                                    ></span>
+                                </div>
+
+                                <form id="loginForm" method="post">
+                                    <div class="mb-4">
+                                        <label class="form-label fw-semibold">Tipo de usuario</label>
+                                        <select
+                                            class="form-select"
+                                            name="userType"
+                                            id="userType"
+                                            aria-label="Default select example"
+                                            required
+                                        >
+                                            <option value="paciente" selected>Paciente</option>
+                                            <option value="odontologo">Odontólogo</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="document" class="form-label fw-semibold">DNI</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="document"
+                                            id="document"
+                                            placeholder="Ingresa tu DNI"
+                                            data-validation-required-message="Este campo es requerido"
+                                            aria-invalid="false"
+                                            required
+                                        />
+                                        <div class="help-block"></div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label" for="password">Contraseña</label>
+                                        <input
+                                            type="password"
+                                            class="form-control"
+                                            name="password"
+                                            id="password"
+                                            data-validation-required-message="Este campo es requerido"
+                                            aria-invalid="false"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div class="d-flex align-items-center justify-content-between mb-4"></div>
+
+                                    <button
+                                        class="btn btn-primary w-100 py-8 mb-4 rounded-2"
+                                        name="loginSubmit"
+                                        type="submit"
+                                    >
+                                        Iniciar sesión
+                                    </button>
+
+                                    <div class="d-flex align-items-center justify-content-center">
+                                        <p class="fs-4 mb-0 fw-medium">¿Eres nuevo?</p>
+                                        <a class="text-primary fw-medium ms-2" href="/user-create"> Crea una cuenta </a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const title = "🟢 Este es un DEMO";
+            const text = `En este DEMO, porfavor ingresa con las siguientes credenciales: <br><br> DNI: <strong>123456789</strong> <br> Contraseña: <strong>Test123456789</strong>`;
+
+            alertModal(title, text);
+
+            const $loginForm = document.getElementById("loginForm");
+
+            const $inputUserType = document.getElementById("userType");
+            const $labelDocument = document.querySelector("label[for=document]");
+            const $inputDocument = document.getElementById("document");
+            const $inputPassword = document.getElementById("password");
+
+            // Cambiar el tipo de documento
+            $inputUserType.addEventListener("change", function () {
+                const value = this.value;
+
+                switch (value) {
+                    case "odontologo":
+                        $labelDocument.textContent = "Matrícula";
+                        $inputDocument.setAttribute("placeholder", "Ingresa tu matrícula");
+                        break;
+
+                    case "paciente":
+                        $labelDocument.textContent = "DNI";
+                        $inputDocument.setAttribute("placeholder", "Ingresa tu DNI");
+                        break;
+
+                    default:
+                        break;
+                }
+            });
+
+            $loginForm.addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                const typeUser = $inputUserType.value;
+                let endpoint = "";
+
+                switch (typeUser) {
+                    case "odontologo":
+                        endpoint = "/odontologo/buscar/matricula";
+                        break;
+
+                    case "paciente":
+                        endpoint = "/paciente/buscar/dni";
+                        break;
+
+                    default:
+                        break;
+                }
+
+                const user = {
+                    document: validateDocument($inputDocument.value),
+                    password: validatePassword($inputPassword.value),
+                };
+
+                // Validar que todos los campos estén completos
+                if (!Object.values(user).every((item) => item !== null)) return;
+
+                // Si todo está validado correctamente, enviar la petición
+                const messages = {
+                    success: {
+                        title: "🟢 Éxito",
+                        text: `Inicio de sesión exitoso.`,
+                        redirect: {
+                            href: `/home`,
+                            text: "Continuar",
+                        },
+                    },
+                    failure: {
+                        title: "🔴 Error",
+                        text: `Problemas en iniciar sesión, revisa tus credenciales.`,
+                    },
+                };
+
+                fetchData(`${endpoint}/${user.document}`, "GET", messages, JSON.stringify(user));
+            });
+        });
+    </script>
+</main>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr" data-bs-theme="dark" data-color-theme="Blue_Theme" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <th:block th:replace="partials/head :: head"></th:block>
+        <th:block th:replace="partials/scripts :: scripts"></th:block>
+    </head>
+
+    <body>
+        <th:block th:replace="partials/preloader :: preloader"></th:block>
+
+        <div id="main-wrapper">
+            <main th:replace="${content} :: content"></main>
+        </div>
+
+        <th:block th:replace="partials/modal :: modal"></th:block>
+        <script th:src="@{/js/pages/main.js}"></script>
+    </body>
+</html>

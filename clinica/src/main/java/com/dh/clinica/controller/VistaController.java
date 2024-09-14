@@ -1,36 +1,44 @@
 package com.dh.clinica.controller;
 
-import com.dh.clinica.dto.paciente.PacienteResponseDTO;
-import com.dh.clinica.service.paciente.PacienteService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class VistaController {
-    private final PacienteService pacienteService;
-
-    public VistaController(PacienteService pacienteService) {
-        this.pacienteService = pacienteService;
+    @GetMapping("/")
+    public String login(Model model) {
+        model.addAttribute("content", "pages/user.login");
+        return "layouts/site";
     }
 
-    // localhost:8080/20  -> @PathVariable
-    // localhost:8080?id=1  -> @RequestParams
-    @GetMapping("/index")
-    public String mostrarPacientePorId(Model model, @RequestParam Integer id) {
-        PacienteResponseDTO paciente = pacienteService.buscarPorId(id);
-        model.addAttribute("nombre", paciente.nombre());
-        model.addAttribute("apellido", paciente.apellido());
-        return "paciente";
+    @GetMapping("/home")
+    public String home(Model model) {
+        model.addAttribute("content", "pages/home");
+        return "layouts/home";
     }
 
-    @GetMapping("/index2/{id}")
-    public String mostrarPacientePorId2(Model model, @PathVariable Integer id) {
-        PacienteResponseDTO paciente = pacienteService.buscarPorId(id);
-        model.addAttribute("nombre", paciente.nombre());
-        model.addAttribute("apellido", paciente.apellido());
-        return "paciente";
+    @GetMapping("/user-create")
+    public String createUser(Model model) {
+        model.addAttribute("content", "pages/user.create");
+        return "layouts/home";
+    }
+
+    @GetMapping("/user-modify")
+    public String modifyUser(Model model) {
+        model.addAttribute("content", "pages/user.modify");
+        return "layouts/home";
+    }
+
+    @GetMapping("/user-dashboard")
+    public String userDashboard(Model model) {
+        model.addAttribute("content", "pages/user.dashboard");
+        return "layouts/home";
+    }
+
+    @GetMapping("/ticket-dashboard")
+    public String ticketDashboard(Model model) {
+        model.addAttribute("content", "pages/ticket.dashboard");
+        return "layouts/home";
     }
 }
