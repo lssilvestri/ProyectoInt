@@ -24,10 +24,12 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @Transactional
 class TurnoServiceTest {
+    TurnoResponseDTO turnoDesdeDb;
     @Autowired
     private TurnoService turnoService;
     @Autowired
@@ -36,21 +38,20 @@ class TurnoServiceTest {
     private PacienteService pacienteService;
     @Autowired
     private ITurnoRepository turnoRepository;
-    TurnoResponseDTO turnoDesdeDb;
 
-    void GuardarOdontologo(){
+    void GuardarOdontologo() {
         OdontologoRequestDTO odontologo = new OdontologoRequestDTO("Miguel", "Arano", "FJH-876");
         OdontologoResponseDTO odontologoDesdeDb = odontologoService.guardar(odontologo);
     }
 
     void GuardarPaciente() {
-        DomicilioDTO domicilio = new DomicilioDTO(null,"Falsa", 456, "Cipolleti", "Rio Negro");
-        PacienteRequestDTO paciente =  new PacienteRequestDTO("Romero", "Luciana", "5665700", LocalDate.now(), domicilio);
+        DomicilioDTO domicilio = new DomicilioDTO(null, "Falsa", "456", "Cipolleti", "Rio Negro");
+        PacienteRequestDTO paciente = new PacienteRequestDTO("Romero", "Luciana", "5665700", LocalDate.now(), domicilio);
         PacienteResponseDTO pacienteDesdeDb = pacienteService.guardar(paciente);
     }
 
     @BeforeEach
-    void GuardarTurno(){
+    void GuardarTurno() {
         GuardarOdontologo();
         GuardarPaciente();
         TurnoRequestDTO turno = new TurnoRequestDTO(1, 1, LocalDate.now());

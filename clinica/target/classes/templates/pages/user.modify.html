@@ -255,52 +255,12 @@
                                             </div>
 
                                             <div class="card-body p-4">
-                                                <h5 class="card-title fw-semibold">Asigna la contraseña</h5>
-
-                                                <p class="card-subtitle mb-4">
-                                                    Para asignar su contraseña por favor confirme aquí
-                                                </p>
-
-                                                <div>
-                                                    <div class="mb-4">
-                                                        <label class="form-label fw-semibold" for="password">
-                                                            Contraseña
-                                                        </label>
-
-                                                        <input
-                                                            aria-invalid="false"
-                                                            class="form-control"
-                                                            data-validation-required-message="Este campo es requerido"
-                                                            id="password"
-                                                            name="password"
-                                                            required
-                                                            type="password"
-                                                        />
-                                                    </div>
-
-                                                    <div class="">
-                                                        <label class="form-label fw-semibold" for="confirm_password">
-                                                            Confirmar contraseña
-                                                        </label>
-
-                                                        <input
-                                                            aria-invalid="false"
-                                                            class="form-control"
-                                                            data-validation-required-message="Este campo es requerido"
-                                                            id="confirm_password"
-                                                            name="confirm_password"
-                                                            required
-                                                            type="password"
-                                                        />
-                                                    </div>
-                                                </div>
-
                                                 <div class="col-12">
                                                     <div
                                                         class="d-flex align-items-center justify-content-end mt-4 gap-3"
                                                     >
                                                         <button class="btn btn-info rounded-pill px-4" type="submit">
-                                                            Guardar
+                                                            Modificar
                                                         </button>
                                                         <button class="btn btn-danger rounded-pill px-4" type="reset">
                                                             Cancelar
@@ -321,7 +281,14 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
+            const URL = window.location.search;
+            const idParam = new URLSearchParams(URL).get("id");
+
             /* ----- Fetch Data ------ */
+
+            const userRes = await fetch(`/odontologo/buscar/matricula/${idParam}`);
+            const userResponse = await userRes.json();
+
             const countriesRes = await fetch(`/data/country.data.json`);
             const countriesResponse = await countriesRes.json();
 
@@ -336,8 +303,11 @@
             const $inputTypeUser = $registerUserForm.querySelector("#userType");
 
             const $inputName = $registerUserForm.querySelector("#name");
+            $inputName.value = userResponse.nombre;
             const $inputLastname = $registerUserForm.querySelector("#last_name");
+            $inputLastname.value = userResponse.apellido;
             const $inputDocument = $registerUserForm.querySelector("#document");
+            $inputDocument.value = userResponse.matricula;
             const $labelDocument = $registerUserForm.querySelector("label[for='document']");
             const $inputDate = $registerUserForm.querySelector("#date");
             const $inputCountryPhone = $registerUserForm.querySelector("#country_phone");
@@ -346,9 +316,6 @@
             const $inputCity = $registerUserForm.querySelector("#city");
             const $imputProvince = $registerUserForm.querySelector("#province");
             const $imputStreetNumber = $registerUserForm.querySelector("#street_number");
-
-            const $inputPassword = $registerUserForm.querySelector("#password");
-            const $inputConfirmPassword = $registerUserForm.querySelector("#confirm_password");
 
             const imagesProfile = [
                 "user-1.jpg",
@@ -472,20 +439,21 @@
 
                 switch (typeUser) {
                     case "odontologo":
-                        endpoint = `/odontologo/guardar`;
+                        endpoint = `/odontologo/modificar`;
                         user = {
+                            id: userResponse.id,
                             imagen: $image.src.replace("/", ""),
                             nombre: validateInput($inputName.value),
                             apellido: validateInput($inputLastname.value),
                             matricula: validateDocument($inputDocument.value),
-                            password: validatePassword($inputPassword.value),
                         };
                         validation = Object.values(user).every((item) => item !== null);
                         break;
 
                     case "paciente":
-                        endpoint = `/paciente/guardar`;
+                        endpoint = `/paciente/modificar`;
                         user = {
+                            id: userResponse.id,
                             imagen: $image.src.replace("/", ""),
                             nombre: validateInput($inputName.value),
                             apellido: validateInput($inputLastname.value),
@@ -498,7 +466,6 @@
                                 calle: validateInput($imputStreetNumber.value.split(" ")[0]),
                                 numero: validateInput($imputStreetNumber.value.split(" ")[1]),
                             },
-                            password: validatePassword($inputPassword.value),
                         };
                         validation =
                             Object.values(user).every((item) => item !== null) &&
@@ -511,15 +478,6 @@
 
                 // Validar los campos
                 if (!validation) return;
-
-                // Verificar si las contraseñas coinciden
-                if (user.password !== validatePassword($inputConfirmPassword.value)) {
-                    const title = "🔴 Error";
-                    const text = `Las contraseñas no coinciden.`;
-
-                    alertModal(title, text);
-                    return;
-                }
 
                 // Si todo está validado correctamente, enviar la petición
                 const messages = {
@@ -538,7 +496,7 @@
                 };
 
                 // Enviar los datos
-                fetchData(endpoint, "POST", messages, JSON.stringify(user));
+                fetchData(endpoint, "PUT", messages, JSON.stringify(user));
             });
         });
 
