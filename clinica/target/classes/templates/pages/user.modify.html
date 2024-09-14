@@ -8,24 +8,7 @@
                     <div class="col-md-14 col-lg-10 col-xl-10 col-xxl-10">
                         <div class="card mb-0">
                             <div class="card-body p-3">
-                                <a
-                                    href="../dark/index.html"
-                                    class="text-nowrap logo-img text-center d-block m-2 mt-0 w-100"
-                                >
-                                    <b class="logo-icon">
-                                        <h2 class="mb-1 fs-7 fw-bolder">Clínica odontológica</h2>
-                                    </b>
-                                </a>
-
-                                <div class="position-relative text-center my-4">
-                                    <p class="mb-0 fs-4 px-3 d-inline-block bg-white z-3 position-relative">
-                                        registro de usuario
-                                    </p>
-                                    <span class="border-top w-100 position-absolute top-50 start-50 translate-middle">
-                                    </span>
-                                </div>
-
-                                <form novalidate id="registerUserForm" class="row">
+                                <form class="row" id="registerUserForm" novalidate>
                                     <div class="col-lg-6 d-flex align-items-stretch" enctype="multipart/form-data">
                                         <div class="card w-100 position-relative overflow-hidden mb-0">
                                             <div class="card-body p-4">
@@ -35,25 +18,25 @@
 
                                                 <div class="text-center">
                                                     <img
-                                                        id="image_profile"
-                                                        th:src="@{/images/profile/user-0.png}"
                                                         alt=""
                                                         class="img-fluid rounded-circle"
-                                                        width="120"
                                                         height="120"
+                                                        id="image_profile"
+                                                        th:src="@{/images/profile/user-0.png}"
+                                                        width="120"
                                                     />
 
                                                     <div
                                                         class="d-flex align-items-center justify-content-center my-4 gap-3"
                                                     >
-                                                        <label for="image" class="btn btn-secondary">Agregar</label>
+                                                        <label class="btn btn-secondary" for="image">Agregar</label>
                                                         <input
-                                                            id="image"
-                                                            type="file"
-                                                            name="image"
                                                             accept="image/*"
-                                                            style="display: none"
+                                                            id="image"
+                                                            name="image"
                                                             required
+                                                            style="display: none"
+                                                            type="file"
                                                         />
                                                     </div>
 
@@ -63,7 +46,7 @@
                                                 <div class="card shadow-none">
                                                     <div class="card-body">
                                                         <h4 class="fw-semibold mb-3">Fotos de perfil prediseñadas</h4>
-                                                        <div id="containerPhotos" class="row"></div>
+                                                        <div class="row" id="containerPhotos"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -86,14 +69,14 @@
                                                                 >Tipo de usuario</label
                                                             >
                                                             <select
-                                                                class="form-select"
-                                                                name="userType"
-                                                                id="userType"
                                                                 aria-label="Default select example"
+                                                                class="form-select"
+                                                                id="userType"
+                                                                name="userType"
                                                                 required
                                                             >
-                                                                <option value="paciente" selected>Paciente</option>
-                                                                <option value="odontologo">Odontólogo</option>
+                                                                <option selected value="odontologo">Odontólogo</option>
+                                                                <option value="paciente">Paciente</option>
                                                             </select>
                                                         </div>
                                                     </div>
@@ -101,78 +84,77 @@
                                                     <div class="row">
                                                         <div class="col-lg-6">
                                                             <div class="mb-4">
-                                                                <label for="name" class="form-label fw-semibold">
-                                                                    Nombre <span class="text-danger">*</span>
+                                                                <label class="form-label fw-semibold" for="name">
+                                                                    Nombre
                                                                 </label>
 
                                                                 <div class="controls">
                                                                     <input
-                                                                        type="name"
-                                                                        class="form-control"
-                                                                        name="name"
-                                                                        id="name"
-                                                                        placeholder="Ingresa tu nombre"
-                                                                        autocomplete="given-name"
-                                                                        data-validation-required-message="Este campo es requerido"
                                                                         aria-invalid="false"
+                                                                        autocomplete="given-name"
+                                                                        class="form-control"
+                                                                        data-validation-required-message="Este campo es requerido"
+                                                                        id="name"
+                                                                        name="name"
+                                                                        placeholder="Ingresa tu nombre"
                                                                         required
+                                                                        type="name"
                                                                     />
                                                                     <div class="help-block"></div>
                                                                 </div>
                                                             </div>
 
                                                             <div class="mb-4">
-                                                                <label for="last_name" class="form-label fw-semibold">
-                                                                    Apellido <span class="text-danger">*</span>
+                                                                <label class="form-label fw-semibold" for="last_name">
+                                                                    Apellido
                                                                 </label>
 
                                                                 <input
-                                                                    type="lastname"
-                                                                    class="form-control"
-                                                                    name="last_name"
-                                                                    id="last_name"
-                                                                    placeholder="Ingresa tu apellido"
+                                                                    aria-invalid="false"
                                                                     autocomplete="family-name"
+                                                                    class="form-control"
                                                                     data-validation-required-message="Este campo es requerido"
-                                                                    aria-invalid="false"
+                                                                    id="last_name"
+                                                                    name="last_name"
+                                                                    placeholder="Ingresa tu apellido"
                                                                     required
+                                                                    type="lastname"
                                                                 />
                                                                 <div class="help-block"></div>
                                                             </div>
 
                                                             <div class="mb-4">
-                                                                <label for="document" class="form-label fw-semibold">
+                                                                <label class="form-label fw-semibold" for="document">
                                                                     DNI
-                                                                    <span class="text-danger">*</span>
                                                                 </label>
 
                                                                 <input
-                                                                    type="text"
-                                                                    class="form-control"
-                                                                    name="document"
-                                                                    id="document"
-                                                                    placeholder="Ingresa tu DNI"
-                                                                    data-validation-required-message="Este campo es requerido"
                                                                     aria-invalid="false"
+                                                                    class="form-control"
+                                                                    data-validation-required-message="Este campo es requerido"
+                                                                    id="document"
+                                                                    name="document"
+                                                                    placeholder="Ingresa tu DNI"
                                                                     required
+                                                                    type="text"
                                                                 />
                                                                 <div class="help-block"></div>
                                                             </div>
 
                                                             <div class="mb-4">
-                                                                <label for="date" class="form-label fw-semibold">
-                                                                    Fehca de ingreso <span class="text-danger">*</span>
+                                                                <label class="form-label fw-semibold" for="date">
+                                                                    Fehca de ingreso
                                                                 </label>
 
                                                                 <input
-                                                                    type="date"
-                                                                    class="form-control"
-                                                                    name="date"
-                                                                    id="date"
-                                                                    value="2018-05-13"
-                                                                    data-validation-required-message="Este campo es requerido"
                                                                     aria-invalid="false"
+                                                                    class="form-control"
+                                                                    data-validation-required-message="Este campo es requerido"
+                                                                    id="date"
+                                                                    name="date"
                                                                     required
+                                                                    type="date"
+                                                                    value="2018-05-13"
                                                                 />
                                                                 <div class="help-block"></div>
                                                             </div>
@@ -181,28 +163,27 @@
                                                         <div class="col-lg-6">
                                                             <div class="mb-4">
                                                                 <label
-                                                                    for="country_phone"
                                                                     class="form-label fw-semibold"
+                                                                    for="country_phone"
                                                                 >
                                                                     Pais
-                                                                    <span class="text-danger">*</span>
                                                                 </label>
 
                                                                 <div class="row edit_input_phone">
                                                                     <img
+                                                                        alt=""
                                                                         class=""
                                                                         id="country_image"
                                                                         th:src="@{/images/svgs/flag.svg}"
-                                                                        alt=""
                                                                     />
 
                                                                     <select
-                                                                        class="form-select"
-                                                                        name="country_phone"
-                                                                        id="country_phone"
-                                                                        aria-label="Default select example"
-                                                                        data-validation-required-message="Este campo es requerido"
                                                                         aria-invalid="false"
+                                                                        aria-label="Default select example"
+                                                                        class="form-select"
+                                                                        data-validation-required-message="Este campo es requerido"
+                                                                        id="country_phone"
+                                                                        name="country_phone"
                                                                         required
                                                                     ></select>
 
@@ -211,61 +192,60 @@
                                                             </div>
 
                                                             <div class="mb-4">
-                                                                <label for="city" class="form-label fw-semibold">
-                                                                    Ciudad <span class="text-danger">*</span>
+                                                                <label class="form-label fw-semibold" for="city">
+                                                                    Ciudad
                                                                 </label>
 
                                                                 <input
-                                                                    type="text"
+                                                                    aria-invalid="false"
                                                                     class="form-control"
-                                                                    name="city"
+                                                                    data-validation-required-message="Este campo es requerido"
                                                                     id="city"
                                                                     inputmode="text"
+                                                                    name="city"
                                                                     placeholder="Ingresa tu ciudad"
-                                                                    data-validation-required-message="Este campo es requerido"
-                                                                    aria-invalid="false"
                                                                     required
+                                                                    type="text"
                                                                 />
                                                                 <div class="help-block"></div>
                                                             </div>
 
                                                             <div class="mb-4">
-                                                                <label for="province" class="form-label fw-semibold">
-                                                                    Provincia <span class="text-danger">*</span>
+                                                                <label class="form-label fw-semibold" for="province">
+                                                                    Provincia
                                                                 </label>
 
                                                                 <input
-                                                                    type="text"
+                                                                    aria-invalid="false"
                                                                     class="form-control"
-                                                                    name="province"
+                                                                    data-validation-required-message="Este campo es requerido"
                                                                     id="province"
                                                                     inputmode="text"
+                                                                    name="province"
                                                                     placeholder="Ingresa tu provincia"
-                                                                    data-validation-required-message="Este campo es requerido"
-                                                                    aria-invalid="false"
                                                                     required
+                                                                    type="text"
                                                                 />
                                                                 <div class="help-block"></div>
                                                             </div>
 
                                                             <div class="mb-4">
                                                                 <label
-                                                                    for="street_number"
                                                                     class="form-label fw-semibold"
+                                                                    for="street_number"
                                                                 >
                                                                     Calle & numero
-                                                                    <span class="text-danger">*</span>
                                                                 </label>
 
                                                                 <input
-                                                                    type="text"
+                                                                    aria-invalid="false"
                                                                     class="form-control purchase-inputmask"
+                                                                    data-validation-required-message="Este campo es requerido"
                                                                     id="street_number"
                                                                     name="street_number"
                                                                     placeholder="Ingresa tu dirección"
-                                                                    data-validation-required-message="Este campo es requerido"
-                                                                    aria-invalid="false"
                                                                     required
+                                                                    type="text"
                                                                 />
                                                                 <div class="help-block"></div>
                                                             </div>
@@ -283,35 +263,34 @@
 
                                                 <div>
                                                     <div class="mb-4">
-                                                        <label for="password" class="form-label fw-semibold">
-                                                            Contraseña <span class="text-danger">*</span>
+                                                        <label class="form-label fw-semibold" for="password">
+                                                            Contraseña
                                                         </label>
 
                                                         <input
-                                                            type="password"
-                                                            class="form-control"
-                                                            name="password"
-                                                            id="password"
-                                                            data-validation-required-message="Este campo es requerido"
                                                             aria-invalid="false"
+                                                            class="form-control"
+                                                            data-validation-required-message="Este campo es requerido"
+                                                            id="password"
+                                                            name="password"
                                                             required
+                                                            type="password"
                                                         />
                                                     </div>
 
                                                     <div class="">
-                                                        <label for="confirm_password" class="form-label fw-semibold">
+                                                        <label class="form-label fw-semibold" for="confirm_password">
                                                             Confirmar contraseña
-                                                            <span class="text-danger">*</span>
                                                         </label>
 
                                                         <input
-                                                            type="password"
-                                                            class="form-control"
-                                                            name="confirm_password"
-                                                            id="confirm_password"
-                                                            data-validation-required-message="Este campo es requerido"
                                                             aria-invalid="false"
+                                                            class="form-control"
+                                                            data-validation-required-message="Este campo es requerido"
+                                                            id="confirm_password"
+                                                            name="confirm_password"
                                                             required
+                                                            type="password"
                                                         />
                                                     </div>
                                                 </div>
@@ -320,10 +299,10 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-end mt-4 gap-3"
                                                     >
-                                                        <button type="submit" class="btn btn-info rounded-pill px-4">
+                                                        <button class="btn btn-info rounded-pill px-4" type="submit">
                                                             Guardar
                                                         </button>
-                                                        <button type="reset" class="btn btn-danger rounded-pill px-4">
+                                                        <button class="btn btn-danger rounded-pill px-4" type="reset">
                                                             Cancelar
                                                         </button>
                                                     </div>
@@ -339,9 +318,6 @@
             </div>
         </div>
     </div>
-
-    <script th:src="@{/js/extra-libs/jqbootstrapvalidation/validation.js}"></script>
-    <script th:src="@{/js/forms/custom-validation-init.js}"></script>
 
     <script>
         document.addEventListener("DOMContentLoaded", async () => {
@@ -551,8 +527,8 @@
                         title: "🟢 Éxito",
                         text: `Creación de perfil exitosa.`,
                         redirect: {
-                            href: `/login`,
-                            text: "Inicia sesión",
+                            href: `/Regresar`,
+                            text: "Volver al CRUD",
                         },
                     },
                     failure: {

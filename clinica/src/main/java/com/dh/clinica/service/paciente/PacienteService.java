@@ -1,10 +1,13 @@
 package com.dh.clinica.service.paciente;
 
+import com.dh.clinica.dto.paciente.DomicilioDTO;
 import com.dh.clinica.dto.paciente.PacienteModificarRequestDTO;
 import com.dh.clinica.dto.paciente.PacienteRequestDTO;
 import com.dh.clinica.dto.paciente.PacienteResponseDTO;
 import com.dh.clinica.entity.Domicilio;
 import com.dh.clinica.entity.Paciente;
+import com.dh.clinica.exception.BadRequestException;
+import com.dh.clinica.exception.ResourceNotFoundException;
 import com.dh.clinica.repository.IPacienteRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
@@ -26,6 +29,11 @@ public class PacienteService implements IPacienteService {
     @Override
     public PacienteResponseDTO guardar(PacienteRequestDTO nuevoPaciente) {
         logger.info("Guardando nuevo paciente: {}", nuevoPaciente);
+
+        if (pacienteRepository.existsByDni(nuevoPaciente.dni())) {
+            logger.error("Ya existe un paciente con el DNI: {}", nuevoPaciente.dni());
+            throw new BadRequestException("Ya existe un paciente con el DNI " + nuevoPaciente.dni());
+        }
 
         Domicilio domicilio = new Domicilio();
         domicilio.setCalle(nuevoPaciente.domicilio().calle());
@@ -54,7 +62,7 @@ public class PacienteService implements IPacienteService {
                 .map(PacienteResponseDTO::new)
                 .orElseThrow(() -> {
                     logger.error("Paciente no encontrado con ID: {}", id);
-                    return new EntityNotFoundException("Paciente no encontrado");
+                    return new ResourceNotFoundException("Paciente no encontrado");
                 });
 
         logger.info("Paciente encontrado: {}", response);
@@ -95,14 +103,21 @@ public class PacienteService implements IPacienteService {
         Paciente paciente = pacienteRepository.findById(pacienteModificado.id())
                 .orElseThrow(() -> {
                     logger.error("Paciente no encontrado con ID: {}", pacienteModificado.id());
-                    return new EntityNotFoundException("Paciente no encontrado");
+                    return new ResourceNotFoundException("Paciente no encontrado");
                 });
 
-        // Modificar los campos
         paciente.setNombre(pacienteModificado.nombre());
         paciente.setApellido(pacienteModificado.apellido());
         paciente.setDni(pacienteModificado.dni());
         paciente.setFechaIngreso(pacienteModificado.fechaIngreso());
+
+        Domicilio domicilio = paciente.getDomicilio();
+        DomicilioDTO nuevoDomicilio = pacienteModificado.domicilio();
+
+        domicilio.setCalle(nuevoDomicilio.calle());
+        domicilio.setNumero(nuevoDomicilio.numero());
+        domicilio.setLocalidad(nuevoDomicilio.localidad());
+        domicilio.setProvincia(nuevoDomicilio.provincia());
 
         pacienteRepository.save(paciente);
         logger.info("Paciente modificado exitosamente: {}", pacienteModificado);
@@ -117,7 +132,7 @@ public class PacienteService implements IPacienteService {
             logger.info("Paciente eliminado exitosamente con ID: {}", id);
         } else {
             logger.error("Paciente no encontrado con ID: {}", id);
-            throw new EntityNotFoundException("Paciente no encontrado");
+            throw new ResourceNotFoundException("Paciente no encontrado");
         }
     }
 }

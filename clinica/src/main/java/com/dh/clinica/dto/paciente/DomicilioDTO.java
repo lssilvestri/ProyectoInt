@@ -1,12 +1,18 @@
 package com.dh.clinica.dto.paciente;
 
 import com.dh.clinica.entity.Domicilio;
+import jakarta.validation.constraints.NotNull;
 
 public record DomicilioDTO(
+        @NotNull
         Long id,
+        @NotNull
         String calle,
+        @NotNull
         String numero,
+        @NotNull
         String localidad,
+        @NotNull
         String provincia) {
 
     public DomicilioDTO(Domicilio domicilio) {

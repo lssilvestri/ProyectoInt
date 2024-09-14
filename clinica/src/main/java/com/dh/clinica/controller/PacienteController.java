@@ -4,7 +4,9 @@ import com.dh.clinica.dto.MessageResponseDTO;
 import com.dh.clinica.dto.paciente.PacienteModificarRequestDTO;
 import com.dh.clinica.dto.paciente.PacienteRequestDTO;
 import com.dh.clinica.dto.paciente.PacienteResponseDTO;
+import com.dh.clinica.exception.ResourceNotFoundException;
 import com.dh.clinica.service.paciente.PacienteService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,13 +30,9 @@ public class PacienteController {
      * @return Paciente guardado con status 201.
      */
     @PostMapping("/guardar")
-    public ResponseEntity<PacienteResponseDTO> guardar(@RequestBody PacienteRequestDTO nuevoPaciente) {
-        try {
-            PacienteResponseDTO pacienteGuardado = pacienteService.guardar(nuevoPaciente);
-            return ResponseEntity.status(HttpStatus.CREATED).body(pacienteGuardado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<PacienteResponseDTO> guardar(@Valid @RequestBody PacienteRequestDTO nuevoPaciente) {
+        PacienteResponseDTO pacienteGuardado = pacienteService.guardar(nuevoPaciente);
+        return ResponseEntity.status(HttpStatus.CREATED).body(pacienteGuardado);
     }
 
     /**
@@ -45,12 +43,8 @@ public class PacienteController {
      */
     @GetMapping("/buscar/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Integer id) {
-        try {
-            PacienteResponseDTO pacienteEncontrado = pacienteService.buscarPorId(id);
-            return ResponseEntity.status(HttpStatus.OK).body(pacienteEncontrado);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        PacienteResponseDTO paciente = pacienteService.buscarPorId(id);
+        return ResponseEntity.status(HttpStatus.OK).body(paciente);
     }
 
     /**
@@ -77,12 +71,8 @@ public class PacienteController {
      */
     @GetMapping("/buscar")
     public ResponseEntity<List<PacienteResponseDTO>> buscarTodos() {
-        try {
-            List<PacienteResponseDTO> pacientes = pacienteService.buscarTodos();
-            return ResponseEntity.status(HttpStatus.OK).body(pacientes);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        List<PacienteResponseDTO> pacientes = pacienteService.buscarTodos();
+        return ResponseEntity.status(HttpStatus.OK).body(pacientes);
     }
 
     /**
@@ -92,13 +82,9 @@ public class PacienteController {
      * @return Mensaje de éxito o error.
      */
     @PutMapping("/modificar")
-    public ResponseEntity<MessageResponseDTO> modificar(@RequestBody PacienteModificarRequestDTO pacienteModificar) {
-        try {
-            pacienteService.modificar(pacienteModificar);
-            return ResponseEntity.ok(new MessageResponseDTO("El paciente fue modificado"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponseDTO(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponseDTO> modificar(@Valid @RequestBody PacienteModificarRequestDTO pacienteModificar) {
+        pacienteService.modificar(pacienteModificar);
+        return ResponseEntity.ok(new MessageResponseDTO("El paciente fue modificado"));
     }
 
     /**
@@ -109,11 +95,7 @@ public class PacienteController {
      */
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<MessageResponseDTO> eliminar(@PathVariable Integer id) {
-        try {
-            pacienteService.eliminar(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El paciente fue eliminado"));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponseDTO(e.getMessage()));
-        }
+        pacienteService.eliminar(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El paciente fue eliminado"));
     }
 }

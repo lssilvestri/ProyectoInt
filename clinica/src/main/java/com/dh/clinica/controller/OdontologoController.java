@@ -6,6 +6,7 @@ import com.dh.clinica.dto.odontologo.OdontologoRequestDTO;
 import com.dh.clinica.dto.odontologo.OdontologoResponseDTO;
 import com.dh.clinica.service.odontologo.OdontologoService;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,9 @@ public class OdontologoController {
      * @return Odontólogo guardado con status 201.
      */
     @PostMapping("/guardar")
-    public ResponseEntity<OdontologoResponseDTO> guardar(@RequestBody OdontologoRequestDTO nuevoOdontologo) {
-        try {
-            OdontologoResponseDTO odontologo = odontologoService.guardar(nuevoOdontologo);
-            return ResponseEntity.status(HttpStatus.CREATED).body(odontologo);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+    public ResponseEntity<OdontologoResponseDTO> guardar(@Valid @RequestBody OdontologoRequestDTO nuevoOdontologo) {
+        OdontologoResponseDTO odontologo = odontologoService.guardar(nuevoOdontologo);
+        return ResponseEntity.status(HttpStatus.CREATED).body(odontologo);
     }
 
     /**
@@ -46,12 +43,8 @@ public class OdontologoController {
      */
     @GetMapping("/buscar/{id}")
     public ResponseEntity<OdontologoResponseDTO> buscarPorId(@PathVariable Integer id) {
-        try {
             OdontologoResponseDTO odontologo = odontologoService.buscarPorId(id);
             return ResponseEntity.status(HttpStatus.OK).body(odontologo);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
     }
 
     /**
@@ -77,12 +70,8 @@ public class OdontologoController {
      */
     @GetMapping("/buscar")
     public ResponseEntity<List<OdontologoResponseDTO>> buscarTodos() {
-        try {
-            List<OdontologoResponseDTO> odontologos = odontologoService.buscarTodos();
-            return ResponseEntity.status(HttpStatus.OK).body(odontologos);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        List<OdontologoResponseDTO> odontologos = odontologoService.buscarTodos();
+        return ResponseEntity.status(HttpStatus.OK).body(odontologos);
     }
 
     /**
@@ -92,13 +81,9 @@ public class OdontologoController {
      * @return Mensaje de éxito o error.
      */
     @PutMapping("/modificar")
-    public ResponseEntity<MessageResponseDTO> modificar(@RequestBody OdontologoModificarRequestDTO odontologoModificado) {
-        try {
-            odontologoService.modificar(odontologoModificado);
-            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El odontólogo fue modificado"));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponseDTO(e.getMessage()));
-        }
+    public ResponseEntity<MessageResponseDTO> modificar(@Valid @RequestBody OdontologoModificarRequestDTO odontologoModificado) {
+        odontologoService.modificar(odontologoModificado);
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El odontólogo fue modificado"));
     }
 
     /**
@@ -109,11 +94,7 @@ public class OdontologoController {
      */
     @DeleteMapping("/eliminar/{id}")
     public ResponseEntity<MessageResponseDTO> eliminar(@PathVariable Integer id) {
-        try {
-            odontologoService.eliminar(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El odontólogo fue eliminado"));
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponseDTO(e.getMessage()));
-        }
+        odontologoService.eliminar(id);
+        return ResponseEntity.status(HttpStatus.OK).body(new MessageResponseDTO("El odontólogo fue eliminado"));
     }
 }

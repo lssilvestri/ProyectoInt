@@ -5,9 +5,9 @@ import com.dh.clinica.dto.odontologo.OdontologoResponseDTO;
 import com.dh.clinica.dto.paciente.DomicilioDTO;
 import com.dh.clinica.dto.paciente.PacienteRequestDTO;
 import com.dh.clinica.dto.paciente.PacienteResponseDTO;
+import com.dh.clinica.dto.turno.TurnoModificarRequestDTO;
 import com.dh.clinica.dto.turno.TurnoRequestDTO;
 import com.dh.clinica.dto.turno.TurnoResponseDTO;
-import com.dh.clinica.entity.Paciente;
 import com.dh.clinica.repository.ITurnoRepository;
 import com.dh.clinica.service.odontologo.OdontologoService;
 import com.dh.clinica.service.paciente.PacienteService;
@@ -16,13 +16,17 @@ import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+@Transactional
 class TurnoServiceTest {
     @Autowired
     private TurnoService turnoService;
@@ -41,7 +45,7 @@ class TurnoServiceTest {
 
     void GuardarPaciente() {
         DomicilioDTO domicilio = new DomicilioDTO(null,"Falsa", 456, "Cipolleti", "Rio Negro");
-        PacienteRequestDTO paciente =  new PacienteRequestDTO("Romero", "Luciana", "566570", LocalDate.now(), domicilio);
+        PacienteRequestDTO paciente =  new PacienteRequestDTO("Romero", "Luciana", "5665700", LocalDate.now(), domicilio);
         PacienteResponseDTO pacienteDesdeDb = pacienteService.guardar(paciente);
     }
 
@@ -78,5 +82,19 @@ class TurnoServiceTest {
         assertFalse(turnoRepository.existsById(turnoDesdeDb.id()));
     }
 
+    @Test
+    void testModificarTurno() {
+        TurnoModificarRequestDTO turnoModificado = new TurnoModificarRequestDTO(
+                turnoDesdeDb.id(),
+                turnoDesdeDb.pacienteResponseDTO().id(),
+                turnoDesdeDb.odontologoResponseDTO().id(),
+                LocalDate.now().plusDays(1)
+        );
 
+        turnoService.modificar(turnoModificado);
+        TurnoResponseDTO turnoEncontrado = turnoService.buscarPorId(turnoDesdeDb.id());
+        assertEquals(turnoModificado.fecha(), turnoEncontrado.fecha());
+        assertEquals(turnoModificado.paciente_id(), turnoEncontrado.pacienteResponseDTO().id());
+        assertEquals(turnoModificado.odontologo_id(), turnoEncontrado.odontologoResponseDTO().id());
+    }
 }

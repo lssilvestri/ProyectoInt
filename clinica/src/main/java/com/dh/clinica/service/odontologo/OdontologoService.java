@@ -6,6 +6,8 @@ import com.dh.clinica.dto.odontologo.OdontologoResponseDTO;
 import com.dh.clinica.dto.turno.TurnoResponseDTO;
 import com.dh.clinica.entity.Odontologo;
 import com.dh.clinica.entity.Turno;
+import com.dh.clinica.exception.BadRequestException;
+import com.dh.clinica.exception.ResourceNotFoundException;
 import com.dh.clinica.repository.IOdontologoRepository;
 import com.dh.clinica.service.turno.TurnoService;
 import jakarta.persistence.EntityNotFoundException;
@@ -34,6 +36,12 @@ public class OdontologoService implements IOdontologoService {
     @Override
     public OdontologoResponseDTO guardar(OdontologoRequestDTO nuevoOdontologo) {
         logger.info("Guardando un nuevo odontólogo: {}", nuevoOdontologo);
+
+        if (odontologoRepository.existsByMatricula(nuevoOdontologo.matricula())) {
+            logger.error("Ya existe un odontólogo con la matrícula: {}", nuevoOdontologo.matricula());
+            throw new BadRequestException("Ya existe un odontólogo con la matrícula " + nuevoOdontologo.matricula());
+        }
+
         Odontologo odontologo = new Odontologo();
         odontologo.setNombre(nuevoOdontologo.nombre());
         odontologo.setApellido(nuevoOdontologo.apellido());
@@ -55,7 +63,7 @@ public class OdontologoService implements IOdontologoService {
                 })
                 .orElseThrow(() -> {
                     logger.error("Odontólogo no encontrado con ID: {}", id);
-                    throw new EntityNotFoundException("Odontólogo no encontrado");
+                    return new ResourceNotFoundException("Odontólogo no encontrado");
                 });
     }
 
@@ -90,7 +98,7 @@ public class OdontologoService implements IOdontologoService {
         Odontologo odontologoEcontrado = odontologoRepository.findById(odontologoModificado.id())
                 .orElseThrow(() -> {
                     logger.error("Odontólogo no encontrado con ID: {}", odontologoModificado.id());
-                    throw new EntityNotFoundException("Odontólogo no encontrado");
+                    return new ResourceNotFoundException("Odontólogo no encontrado");
                 });
 
         Set<TurnoResponseDTO> turnosExistentes = turnoService.buscarTurnoOdontologo(odontologoModificado.id());
@@ -122,7 +130,7 @@ public class OdontologoService implements IOdontologoService {
             logger.info("Odontólogo con ID: {} eliminado exitosamente", id);
         } else {
             logger.error("Odontólogo no encontrado con ID: {}", id);
-            throw new EntityNotFoundException("Odontólogo no encontrado");
+            throw new ResourceNotFoundException("Odontólogo no encontrado");
         }
     }
 }
